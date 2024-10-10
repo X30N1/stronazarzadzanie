@@ -1,0 +1,45 @@
+body{
+    margin: 0;
+    padding: 0;
+}
+
+div{
+    border-width: 1.5%;
+    border-style: solid;
+    border-color: black;
+}
+
+#header{
+    width: 100%;
+    height: 10%;
+    display: inline-flex;
+}
+
+#lside{
+    width: 50%;
+    height: 100%;
+}
+
+#rside{
+    display: flex;
+    width: 50%;
+    height: 100%;
+    justify-content: right;
+}
+
+#tabela{
+    width: 100%;
+    height: 70%;
+    background-color: gray;
+    border-radius: 2.5%;
+    align-self: center;
+}
+
+#bottom
+{
+    display: inline-flex;
+    justify-content: space-between;
+    height: 3%;
+    width: 100%;
+
+}

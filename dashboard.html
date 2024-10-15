@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel użytkownika</title>
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+    <header>
+        <div class="nav-left">Rejestracja</div>
+        <div class="nav-right">
+            Witaj, [UŻYTKOWNIK]
+            <button class="logout-button">Wyloguj</button>
+        </div>
+    </header>
+
+    <main id="main-content">
+        <div class="table-container">
+            <div class="table-header">
+                <div class="table-col">Imię</div>
+                <div class="table-col">Nazwisko</div>
+                <div class="table-col">Data</div>
+                <div class="table-col">Godzina</div>
+                <div class="table-col">Telefon</div>
+                <div class="table-col">Status</div>
+            </div>
+            <div class="table-content">
+                <h1>TUTAJ TABLICA</h1>
+            </div>
+            <div class="table-footer">
+                <span>Strona 1/X</span>
+                <span>Wyświetl Max: <select>
+                    <option value="10">10</option>
+                    <option value="25">25</option>
+                    <option value="50" selected>50</option>
+                </select></span>
+            </div>
+        </div>
+
+        <div class="buttons-container">
+            <button class="delete-button">Usuń wizytę</button>
+            <button class="edit-button">Edytuj wizytę</button>
+            <button class="add-button" id="add-visit-btn">Dodaj wizytę</button>
+        </div>
+    </main>
+
+    <!-- dodaj wizytę -->
+    <div class="popup-overlay" id="popup-overlay">
+        <div class="popup">
+            <button class="close-popup" id="close-popup-btn">X</button>
+            <form>
+                <label for="fname">Imię</label>
+                <input type="text" id="fname" name="fname">
+                
+                <label for="lname">Nazwisko</label>
+                <input type="text" id="lname" name="lname">
+                
+                <label for="phone">Telefon</label>
+                <input type="text" id="phone" name="phone">
+                
+                <label for="date">Data</label>
+                <input type="date" id="date" name="date">
+                
+                <label for="time">Godzina</label>
+                <input type="time" id="time" name="time">
+                
+                <button type="submit" class="save-button">Zapisz</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+// Pobierz elementy
+const addVisitBtn = document.getElementById('add-visit-btn');
+const popupOverlay = document.getElementById('popup-overlay');
+const closePopupBtn = document.getElementById('close-popup-btn');
+const mainContent = document.getElementById('main-content');
+
+// Okienko & blur
+addVisitBtn.addEventListener('click', () => {
+    popupOverlay.style.display = 'flex';
+    mainContent.classList.add('blur');
+});
+
+// Close okienko & usuń blur
+closePopupBtn.addEventListener('click', () => {
+    popupOverlay.style.display = 'none';
+    mainContent.classList.remove('blur');
+});
+
+    </script>
+</body>
+</html>

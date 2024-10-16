@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel użytkownika</title>
-    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+
+    <script src="js/okienko.js"></script>
 </head>
 <body>
     <header>
@@ -69,26 +71,5 @@
             </form>
         </div>
     </div>
-
-    <script>
-// Pobierz elementy
-const addVisitBtn = document.getElementById('add-visit-btn');
-const popupOverlay = document.getElementById('popup-overlay');
-const closePopupBtn = document.getElementById('close-popup-btn');
-const mainContent = document.getElementById('main-content');
-
-// Okienko & blur
-addVisitBtn.addEventListener('click', () => {
-    popupOverlay.style.display = 'flex';
-    mainContent.classList.add('blur');
-});
-
-// Close okienko & usuń blur
-closePopupBtn.addEventListener('click', () => {
-    popupOverlay.style.display = 'none';
-    mainContent.classList.remove('blur');
-});
-
-    </script>
 </body>
 </html>

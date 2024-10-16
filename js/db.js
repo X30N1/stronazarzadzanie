@@ -1,0 +1,1 @@
+import db from "../db-prototype.json" assert {type: 'json'}

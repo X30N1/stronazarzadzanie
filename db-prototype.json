@@ -1,0 +1,28 @@
+{
+    "accounts": {
+        "1": {
+            "accountid": 1,
+            "login": "test1234",
+            "password": "test1234",
+            "name": "Test",
+            "lname": "Testowski",
+            "privilege": 1
+        }
+    },
+    "patients": {
+        "1": {
+            "patientid": 1,
+            "patientName": "Testo",
+            "patientLName": "Testow"
+        }
+    },
+    "appointments": {
+        "1": {
+            "appointmentid": 1,
+            "patientid": 1,
+            "appointmentDate": "2024-12-13",
+            "appointmentTime": "16:00:00",
+            "appointmentStatus": "test"
+        }
+    }
+}

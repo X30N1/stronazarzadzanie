@@ -10,7 +10,15 @@ app.listen(serverPort, () => {
 app.use(express.static('public'));
 
 app.get("/", (req, res, next) => {
-  res.sendFile(path.join(__dirname, "/public/index.html"));
+  res.sendFile(path.join(__dirname, "/public/logowanie.html"));
+});
+
+app.get("/login", (req, res, next) => {
+  res.sendFile(path.join(__dirname, "/public/logowanie.html"));
+});
+
+app.get("/dashboard", (req, res, next) => {
+  res.sendFile(path.join(__dirname, "/public/dashboard.html"));
 });
 
 app.use(function(req, res){

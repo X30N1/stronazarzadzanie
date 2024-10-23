@@ -6,6 +6,7 @@
             "password": "test1234",
             "name": "Test",
             "lname": "Testowski",
+            "email": "sowapocztowa1@gmail.com",
             "privilege": 1
         }
     },

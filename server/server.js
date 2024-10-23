@@ -9,7 +9,7 @@ app.use(express.urlencoded())
 app.use(express.json())
 app.use(express.static('public'));
 app.use(session({
-    secret: 'secret-key',
+    secret: 'insanely secret shenanigans on the webs woah',
     resave: false,
     saveUninitialized: false,
     cookie: {
@@ -89,6 +89,29 @@ app.get("/api/accounts/logout", (request, response) => {
         else {
             response.redirect("/login")
         }
+    })
+})
+
+app.post("/api/appointments", (request, response, next) => {
+
+    const login = request.body.login
+    const password = request.body.password
+    const limit = request.body.limit
+    const offset = request.body.offset * limit
+
+    var sql = ""
+    var parameters = []
+
+    sql = "SELECT * FROM appointments WHERE LIMIT %limit% OFFSET %offset%;"
+    .replace("%limit%", limit) 
+    .replace("%offset%", offset) 
+
+    db.all(sql, parameters, (error, sqlResponse) => {
+        if (error) {
+            response.status(400).json({"error":error.message})
+            return
+        }
+        return response.json({"success":sqlResponse})
     })
 })
 

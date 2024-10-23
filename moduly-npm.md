@@ -3,3 +3,4 @@
 - [PM2](https://pm2.keymetrics.io/) (zarządzanie serwerami)
 - [ExpressJS](https://expressjs.com/) (bazy danych)
 - [bcrypt](https://www.npmjs.com/package/bcrypt) (enkrypcja/dekrypcja)
+- [express-session](https://www.npmjs.com/package/express-session) (handlowanie sesji)

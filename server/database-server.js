@@ -1,6 +1,8 @@
 const express = require("express")
+const bcrypt = require("bcrypt")
 const app = express()
 const db = require("./database.js")
+
 
 app.use(express.urlencoded())
 app.use(express.json())
@@ -25,19 +27,24 @@ app.post("/api/accounts/login", (request, response, next) => {
 
     var sql = ""
     var parameters = []
+    var hash
 
-    sql = "SELECT password FROM cards WHERE cardID = %cardID%;"
-    .replace("%cardID%", cardID) 
+    sql = "SELECT password FROM accounts WHERE cardID = %login%;"
+    .replace("%login%", login) 
 
     db.all(sql, parameters, (error, sqlResponse) => {
         if (error) {
             response.status(400).json({"error":error.message})
             return
         }
-        return response.json({
-            "message": "success",
-            "data": sqlResponse
-        })
+        hash = sqlResponse[0].password
+    })
+
+    bcrypt.compare(password, hash, function(err, result) {
+        if(!result) {
+            return response.json({"error":"invalid credentials"})
+        }
+        return response.json({"message":"success"})
     })
 })
 

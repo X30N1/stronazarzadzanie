@@ -31,6 +31,10 @@ app.get("/login", (request, response, next) => {
     response.sendFile(path.join(__dirname, "/public/logowanie.html"));
 });
 
+app.get("/przypomnij", (request, response, next) => {
+    response.sendFile(path.join(__dirname, "/public/przypomnij.html"));
+});
+
 app.get("/dashboard", (request, response, next) => {
     response.sendFile(path.join(__dirname, "/public/dashboard.html"));
 

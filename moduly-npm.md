@@ -4,3 +4,6 @@
 - [ExpressJS](https://expressjs.com/) (bazy danych)
 - [bcrypt](https://www.npmjs.com/package/bcrypt) (enkrypcja/dekrypcja)
 - [express-session](https://www.npmjs.com/package/express-session) (handlowanie sesji)
+
+### Note:
+Następnym razem, jak opisujesz *jakiekolwiek* wymagania to pisz **konkretnie zainstalowaną wersję** btw.

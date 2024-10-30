@@ -130,7 +130,7 @@ app.post("/api/accounts/register", (request, response, next) => {
         hashedPwd = hash
     });
 
-    sql = "INSERT INTO accounts VALUES (null, %login%, %password%, %name%, %lname%, %email%, %privilege%);"
+    sql = "INSERT INTO accounts VALUES (null, '%login%', '%password%', '%name%', '%lname%', '%email%', %privilege%);"
     .replace("%login%", login)
     .replace("%password%", hashedPwd)
     .replace("%name%", name)
@@ -148,6 +148,31 @@ app.post("/api/accounts/register", (request, response, next) => {
     })
 })
 
+app.post("/api/patients/select", (request, response, next) => {
+
+    const privilege = request.body.privilege
+    const patientID = request.body.patientID
+
+    if(privilege < 1) {
+        return response.status(400).json({"error":"insufficient permissions"})
+    }
+
+    var sql = ""
+    var parameters = []
+
+    sql = "SELECT * FROM patients WHERE patientID = %patientID%;"
+    .replace("%patientID%", patientID)
+
+    db.all(sql, parameters, (error, sqlResponse) => {
+        if (error) {
+            response.status(400).json({"error":error.message})
+            return
+        }
+        return response.json({"success":sqlResponse})
+    })
+})
+
+
 app.post("/api/patients/add", (request, response, next) => {
 
     const privilege = request.body.privilege
@@ -162,7 +187,7 @@ app.post("/api/patients/add", (request, response, next) => {
     var sql = ""
     var parameters = []
 
-    sql = "INSERT INTO patients VALUES (null, %patientName%, %patientLName%, %patientContact%);"
+    sql = "INSERT INTO patients VALUES (null, '%patientName%', '%patientLName%', '%patientContact%');"
     .replace("%patientName", patientName)
     .replace("%patientLName%", patientLName)
     .replace("%patientContact%", patientContact)
@@ -191,7 +216,7 @@ app.post("/api/patients/update", (request, response, next) => {
     var sql = ""
     var parameters = []
 
-    sql = "INSERT patients SET patientName = %patientName%, patientLName = %patientLName%, patientContact = %patientContact% WHERE patients.patientID = %patientID%;"
+    sql = "INSERT patients SET patientName = '%patientName%', patientLName = '%patientLName%', patientContact = '%patientContact%' WHERE patientID = %patientID%;"
     .replace("%patientName", patientName)
     .replace("%patientLName%", patientLName)
     .replace("%patientContact%", patientContact)
@@ -206,7 +231,7 @@ app.post("/api/patients/update", (request, response, next) => {
     })
 })
 
-app.post("/api/appointments", (request, response, next) => {
+app.post("/api/appointments/select", (request, response, next) => {
 
     const privilege = request.body.privilege
     const limit = request.body.limit
@@ -244,7 +269,7 @@ app.post("/api/appointments/add", (request, response, next) => {
     var sql = ""
     var parameters = []
 
-    sql = "INSERT INTO appointments VALUES (null, %patientID%, %appointmentDate%, %appointmentTime%, %appointmentStatus%);"
+    sql = "INSERT INTO appointments VALUES (null, %patientID%, '%appointmentDate%', '%appointmentTime%', '%appointmentStatus%');"
     .replace("%patientID%", patientID)
     .replace("%appointmentDate%", appointmentDate)
     .replace("%appointmentTime", appointmentTime)
@@ -275,7 +300,7 @@ app.post("/api/appointments/update", (request, response, next) => {
     var sql = ""
     var parameters = []
 
-    sql = "UPDATE appointments SET patientID = %patientID%, appointmentDate = %appointmentDate%, appointmentTime = %appointmentTime%, appointmentStatus = %appointmentStatus% WHERE appointmentID = %appointmentID%;"
+    sql = "UPDATE appointments SET patientID = %patientID%, appointmentDate = '%appointmentDate%', appointmentTime = '%appointmentTime%', appointmentStatus = '%appointmentStatus%' WHERE appointmentID = %appointmentID%;"
     .replace("%patientID%", patientID)
     .replace("%appointmentDate%", appointmentDate)
     .replace("%appointmentTime", appointmentTime)

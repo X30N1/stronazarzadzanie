@@ -3,7 +3,7 @@ const session = require('express-session');
 const bcrypt = require("bcrypt")
 const saltRounds = 10;
 const app = express()
-const db = require("database.js")
+const db = require("./database/database.js")
 const path = require("path");
 
 app.use(express.urlencoded())
@@ -25,7 +25,7 @@ app.listen(serverPort, () => {
 })
 
 app.get("/", (request, response, next) => {
-    response.sendFile(path.join(__dirname, "/public/logowanie.html"));
+    response.redirect('/login');
   });
   
 app.get("/login", (request, response, next) => {
@@ -44,10 +44,10 @@ app.get("/dashboard", (request, response, next) => {
     response.sendFile(path.join(__dirname, "/public/dashboard.html"));
 
     const isLoggedIn = request.session.isLoggedIn;
-    const username = request.session.username;
+    const login = request.session.login;
 
     if (isLoggedIn) {
-        response.render('dashboard', { username });
+        response.render('dashboard', { login });
     } else {
         response.redirect('/login');
     }

@@ -1,6 +1,6 @@
 var sqlite3 = require("sqlite3").verbose();
 
-const dbsource = "./sql/database.sqlite";
+const dbsource = "database.sqlite";
 
 var db = new sqlite3.Database(dbsource, (error) => {
     if (error) {

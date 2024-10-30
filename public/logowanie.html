@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="js/login.js"></script>
     <title>Logowanie</title>
     <link rel="stylesheet" href="css/logowanie.css">
 </head>
@@ -10,9 +11,9 @@
     <div class="login-container">
         <h1>Zaloguj się</h1>
         <form>
-            <input type="text" placeholder="Login" class="input-field">
-            <input type="password" placeholder="Hasło" class="input-field">
-            <button type="submit" class="login-button">Zaloguj</button>
+            <input id="inputLogin" type="text" placeholder="Login" class="input-field">
+            <input id="inputPassword" type="password" placeholder="Hasło" class="input-field">
+            <input type="button" onclick="test()" value="Zaloguj" class="login-button">
         </form>
         <a href="przypomnij.html" class="forgot-password">Przypomnij hasło</a>
     </div>

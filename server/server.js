@@ -32,6 +32,10 @@ app.get("/login", (request, response, next) => {
     response.sendFile(path.join(__dirname, "/public/logowanie.html"));
 });
 
+app.get("/register", (request, response, next) => {
+    response.sendFile(path.join(__dirname, "/public/rejestracja.html"));
+});
+
 app.get("/przypomnij", (request, response, next) => {
     response.sendFile(path.join(__dirname, "/public/przypomnij.html"));
 });
@@ -144,6 +148,64 @@ app.post("/api/accounts/register", (request, response, next) => {
     })
 })
 
+app.post("/api/patients/add", (request, response, next) => {
+
+    const privilege = request.body.privilege
+    const patientName = request.body.patientName
+    const patientLName = request.body.patientLName
+    const patientContact = request.body.patientContact
+
+    if(privilege < 1) {
+        return response.status(400).json({"error":"insufficient permissions"})
+    }
+
+    var sql = ""
+    var parameters = []
+
+    sql = "INSERT INTO patients VALUES (null, %patientName%, %patientLName%, %patientContact%);"
+    .replace("%patientName", patientName)
+    .replace("%patientLName%", patientLName)
+    .replace("%patientContact%", patientContact)
+
+    db.all(sql, parameters, (error, sqlResponse) => {
+        if (error) {
+            response.status(400).json({"error":error.message})
+            return
+        }
+        return response.json({"success":sqlResponse})
+    })
+})
+
+app.post("/api/patients/update", (request, response, next) => {
+
+    const privilege = request.body.privilege
+    const patientID = request.body.patientID
+    const patientName = request.body.patientName
+    const patientLName = request.body.patientLName
+    const patientContact = request.body.patientContact
+
+    if(privilege < 1) {
+        return response.status(400).json({"error":"insufficient permissions"})
+    }
+
+    var sql = ""
+    var parameters = []
+
+    sql = "INSERT patients SET patientName = %patientName%, patientLName = %patientLName%, patientContact = %patientContact% WHERE patients.patientID = %patientID%;"
+    .replace("%patientName", patientName)
+    .replace("%patientLName%", patientLName)
+    .replace("%patientContact%", patientContact)
+    .replace("%patientID%", patientID)
+
+    db.all(sql, parameters, (error, sqlResponse) => {
+        if (error) {
+            response.status(400).json({"error":error.message})
+            return
+        }
+        return response.json({"success":sqlResponse})
+    })
+})
+
 app.post("/api/appointments", (request, response, next) => {
 
     const privilege = request.body.privilege
@@ -187,6 +249,38 @@ app.post("/api/appointments/add", (request, response, next) => {
     .replace("%appointmentDate%", appointmentDate)
     .replace("%appointmentTime", appointmentTime)
     .replace("%appointmentStatus", appointmentStatus)
+
+    db.all(sql, parameters, (error, sqlResponse) => {
+        if (error) {
+            response.status(400).json({"error":error.message})
+            return
+        }
+        return response.json({"success":sqlResponse})
+    })
+})
+
+app.post("/api/appointments/update", (request, response, next) => {
+
+    const privilege = request.body.privilege
+    const appointmentID = request.body.appointmentID
+    const patientID = request.body.patientID
+    const appointmentDate = request.body.appointmentDate
+    const appointmentTime = request.body.appointmentTime
+    const appointmentStatus = request.body.appointmentStatus
+
+    if(privilege < 1) {
+        return response.status(400).json({"error":"insufficient permissions"})
+    }
+
+    var sql = ""
+    var parameters = []
+
+    sql = "UPDATE appointments SET patientID = %patientID%, appointmentDate = %appointmentDate%, appointmentTime = %appointmentTime%, appointmentStatus = %appointmentStatus% WHERE appointmentID = %appointmentID%;"
+    .replace("%patientID%", patientID)
+    .replace("%appointmentDate%", appointmentDate)
+    .replace("%appointmentTime", appointmentTime)
+    .replace("%appointmentStatus", appointmentStatus)
+    .replace("%appointmentID%", appointmentID)
 
     db.all(sql, parameters, (error, sqlResponse) => {
         if (error) {

@@ -1,13 +1,14 @@
 const url = "http://localhost:8000/api/accounts/login"
 
-function button() {
+async function button() {
     const login = document.getElementById("inputLogin").value
     const password = document.getElementById("inputPassword").value
 
     console.log(login)
     console.log(password)
 
-    asyncLogin(login, password)
+    const content = await asyncLogin(login, password)
+    console.log(content)
 }
 
 async function asyncLogin(login, password) {

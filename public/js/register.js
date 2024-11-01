@@ -1,5 +1,44 @@
 const url = "http://localhost:8000/api/accounts/register"
-const url2 = "http://localhost:8000/login"
+const urlL = "http://localhost:8000/login"
+const urlR = "http://localhost:8000/register"
+
+window.onload = function() {
+    var cookie = getCookie("message")
+    if(cookie) {
+        displayError(cookie)
+        document.cookie = "message =; expires=Thu, 01 Jan 1970 00:00:00 UTC; SameSite = None; Secure; path=/register;"
+    }
+}
+
+function displayError(error) {
+    switch(error) {
+        case "passwordCheck":
+            document.getElementById("infoMsg").innerHTML = "Błąd: Hasła nie były identyczne"
+            break
+        case "missingInput":
+            document.getElementById("infoMsg").innerHTML = "Błąd: Wszystkie pola muszą być uzupełnione"
+            break;
+        case "error":
+            document.getElementById("infoMsg").innerHTML = "Błąd: Coś poszło nie tak..."
+            break;
+    }
+}
+
+function getCookie(cname) {
+    let name = cname + "=";
+    let decodedCookie = decodeURIComponent(document.cookie);
+    let ca = decodedCookie.split(';');
+    for(let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+}
 
 async function button() {
 
@@ -8,7 +47,20 @@ async function button() {
     const email = document.getElementById("inputEmail").value
     const login = document.getElementById("inputLogin").value
     const password = document.getElementById("inputPassword").value
+    const passwordC = document.getElementById("inputPasswordC").value
     const privilege = 1
+
+    if(password != passwordC) {
+        document.cookie = "message = passwordCheck; SameSite = None; Max-Age = 1000; Secure; path=/register;"
+        window.location.href = urlR
+        return
+    }
+
+    if(name == "" || lname == "" || email == "" || login == "" || password == "" || password == "") {
+        document.cookie = "message = missingInput; SameSite = None; Max-Age = 1000; Secure; path=/register;"
+        window.location.href = urlR
+        return
+    }
 
     console.log(name)
     console.log(lname)
@@ -18,10 +70,15 @@ async function button() {
     console.log(privilege)
 
     var content = await asyncRegister(name, lname, email, login, password, privilege)
-
-    console.log(content.message)
-    // if(content.value[0].message = "success")
-    // window.location.href = url2
+    
+    if(content.message == "success") {
+        document.cookie = "message = success; SameSite = None; Max-Age = 1000; Secure; path=/login;"
+        window.location.href = urlL
+    }
+    else {
+        document.cookie = "message = error; SameSite = None; Max-Age = 1000; Secure; path=/register;"
+        window.location.href = urlR
+    }
 }
 
 async function asyncRegister(name, lname, email, login, password, privilege) {

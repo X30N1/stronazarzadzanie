@@ -64,10 +64,6 @@ app.post("/api/accounts/login", (request, response, next) => {
 
     var sql = ""
     var parameters = []
-    var hash
-    var name
-    var lname
-    var privilege
 
     sql = "SELECT password, name, lname, privilege FROM accounts WHERE login = %login%;"
     .replace("%login%", login) 
@@ -77,25 +73,26 @@ app.post("/api/accounts/login", (request, response, next) => {
             response.status(400).json({"error":error.message})
             return
         }
-        hash = sqlResponse[0].password
-        name = sqlResponse[0].name
-        lname = sqlResponse[0].lname
-        privilege = sqlResponse[0].privilege
-    })
+        
+        var hash = sqlResponse[0].password
+        var name = sqlResponse[0].name
+        var lname = sqlResponse[0].lname
+        var privilege = sqlResponse[0].privilege
 
-    bcrypt.compare(password, hash, function(err, result) {
-        if(!result) {
-            response.redirect("/login")
-            return response.json({"error":err})
-        }
-        request.session.isLoggedIn = true
-        request.session.login = login
-        request.session.name = name
-        request.session.lname = lname
-        request.session.privilege = privilege
-
-        response.redirect("/dashboard")
-        return response.json({"success":true})
+        bcrypt.compare(password, hash, function(err, result) {
+            if(!result) {
+                response.redirect("/login")
+                return
+            }
+            request.session.isLoggedIn = true
+            request.session.login = login
+            request.session.name = name
+            request.session.lname = lname
+            request.session.privilege = privilege
+    
+            response.redirect("/dashboard")
+            return
+        })
     })
 })
 

@@ -7,14 +7,14 @@
     <link rel="stylesheet" href="css/dashboard.css">
 
     <script src="js/okienko.js"></script>
-    <script src="js/db.js"></script>
+    <script src="js/dashboard.js"></script>
 
 </head>
 <body>
     <header>
         <div class="nav-left">Rejestracja</div>
         <div class="nav-right">
-            Witaj, [UŻYTKOWNIK]
+            <span id="welcome"></span>
             <button class="logout-button">Wyloguj</button>
         </div>
     </header>
@@ -33,8 +33,8 @@
                 <h1>TUTAJ TABLICA</h1>
             </div>
             <div class="table-footer">
-                <span>Strona 1/X</span>
-                <span>Wyświetl Max: <select>
+                <span id="count">Strona 1/1 (0 pól)</span>
+                <span>Wyświetl: <select id="display-count">
                     <option value="10">10</option>
                     <option value="25">25</option>
                     <option value="50" selected>50</option>
@@ -54,22 +54,22 @@
         <div class="popup">
             <button class="close-popup" id="close-popup-btn">X</button>
             <form>
-                <label for="fname">Imię</label>
-                <input type="text" id="fname" name="fname">
+                <label for="name">Imię</label>
+                <input type="text" id="inputName" name="fname">
                 
                 <label for="lname">Nazwisko</label>
-                <input type="text" id="lname" name="lname">
+                <input type="text" id="inputLName" name="lname">
                 
-                <label for="phone">Telefon</label>
-                <input type="text" id="phone" name="phone">
+                <label for="contact">Kontakt</label>
+                <input type="text" id="inputContact" name="contact">
                 
                 <label for="date">Data</label>
-                <input type="date" id="date" name="date">
+                <input type="date" id="inputDate" name="date">
                 
                 <label for="time">Godzina</label>
-                <input type="time" id="time" name="time">
+                <input type="time" id="inputTime" name="time">
                 
-                <button type="submit" class="save-button">Zapisz</button>
+                <input type="button" class="save-button" onclick="buttonAddAppointment()" value="Zapisz"></input>
             </form>
         </div>
     </div>

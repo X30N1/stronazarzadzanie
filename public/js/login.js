@@ -1,4 +1,6 @@
 const url = "http://localhost:8000/api/accounts/login"
+const urlD = "http://localhost:8000/dashboard"
+const urlL = "http://localhost:8000/login"
 
 async function button() {
     const login = document.getElementById("inputLogin").value
@@ -9,6 +11,17 @@ async function button() {
 
     const content = await asyncLogin(login, password)
     console.log(content)
+
+    if(content.message = "success") {
+        sessionStorage.setItem("login", login)
+        sessionStorage.setItem("name", content.name)
+        sessionStorage.setItem("lname", content.lname)
+        sessionStorage.setItem("privilege", content.privilege)
+        window.location.href = urlD
+    }
+    else {
+        window.location.href = urlL
+    }
 }
 
 async function asyncLogin(login, password) {

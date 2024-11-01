@@ -17,6 +17,7 @@ app.use(session({
         maxAge: 43200000
     }
 }));
+app.set('view engine', 'jade')
 
 const serverPort = 8000;
 
@@ -41,13 +42,11 @@ app.get("/przypomnij", (request, response, next) => {
 });
 
 app.get("/dashboard", (request, response, next) => {
-    response.sendFile(path.join(__dirname, "/public/dashboard.html"));
 
     const isLoggedIn = request.session.isLoggedIn;
-    const login = request.session.login;
-
+    
     if (isLoggedIn) {
-        response.render('dashboard', { login });
+        response.sendFile(path.join(__dirname, "/public/dashboard.html"));
     } else {
         response.redirect('/login');
     }
@@ -65,7 +64,7 @@ app.post("/api/accounts/login", (request, response, next) => {
     var sql = ""
     var parameters = []
 
-    sql = "SELECT password, name, lname, privilege FROM accounts WHERE login = %login%;"
+    sql = "SELECT password, name, lname, privilege FROM accounts WHERE login = '%login%';"
     .replace("%login%", login) 
 
     db.all(sql, parameters, (error, sqlResponse) => {
@@ -73,7 +72,7 @@ app.post("/api/accounts/login", (request, response, next) => {
             response.status(400).json({"error":error.message})
             return
         }
-        
+
         var hash = sqlResponse[0].password
         var name = sqlResponse[0].name
         var lname = sqlResponse[0].lname
@@ -81,7 +80,7 @@ app.post("/api/accounts/login", (request, response, next) => {
 
         bcrypt.compare(password, hash, function(err, result) {
             if(!result) {
-                response.redirect("/login")
+                response.json({"message":"failure"})
                 return
             }
             request.session.isLoggedIn = true
@@ -90,7 +89,13 @@ app.post("/api/accounts/login", (request, response, next) => {
             request.session.lname = lname
             request.session.privilege = privilege
     
-            response.redirect("/dashboard")
+            response.json({
+                "message":"success",
+                login: login,
+                name: name,
+                lname: lname,
+                privilege: privilege
+            })
             return
         })
     })
@@ -115,8 +120,6 @@ app.post("/api/accounts/register", (request, response, next) => {
     const lname = request.body.lname
     const email = request.body.email
     const privilege = request.body.privilege
-
-    
 
     bcrypt.hash(password, saltRounds, function(error, hash) {
         if (error) {
@@ -170,32 +173,62 @@ app.post("/api/patients/select", (request, response, next) => {
     })
 })
 
-
-app.post("/api/patients/add", (request, response, next) => {
+app.post("/api/patients/add", (request, response, next) => { // Masakra, pewnie można to lepiej, ale na razie jest tak xD
 
     const privilege = request.body.privilege
-    const patientName = request.body.patientName
-    const patientLName = request.body.patientLName
-    const patientContact = request.body.patientContact
+    const patientName = request.body.name
+    const patientLName = request.body.lname
+    const patientContact = request.body.contact
 
     if(privilege < 1) {
         return response.status(400).json({"error":"insufficient permissions"})
     }
 
     var sql = ""
+    var sql2 = ""
     var parameters = []
 
-    sql = "INSERT INTO patients VALUES (null, '%patientName%', '%patientLName%', '%patientContact%');"
-    .replace("%patientName", patientName)
+    sql = "SELECT patientID FROM patients WHERE patientName = '%patientName%' AND patientLName = '%patientLName%' AND patientContact = '%patientContact%';"
+    .replace("%patientName%", patientName)
+    .replace("%patientLName%", patientLName)
+    .replace("%patientContact%", patientContact)
+
+    sql2 = "INSERT INTO patients VALUES (null, '%patientName%', '%patientLName%', '%patientContact%');"
+    .replace("%patientName%", patientName)
     .replace("%patientLName%", patientLName)
     .replace("%patientContact%", patientContact)
 
     db.all(sql, parameters, (error, sqlResponse) => {
+
         if (error) {
             response.status(400).json({"error":error.message})
             return
         }
-        return response.json({"success":sqlResponse})
+
+        if(sqlResponse.length != 0) {
+            response.json({"success":sqlResponse})
+            return
+        }
+
+        db.all(sql2, parameters, (error2, sqlResponse2) => {
+
+            if (error2) {
+                response.status(400).json({"error":error.message})
+                return
+            }
+
+            db.all(sql, parameters, (error3, sqlResponse3) => {
+
+                if (error3) {
+                    response.status(400).json({"error":error.message})
+                    return
+                }
+                
+                response.json({"success":sqlResponse3})
+                return
+
+            })
+        })
     })
 })
 
@@ -238,9 +271,31 @@ app.post("/api/appointments/select", (request, response, next) => {
     var sql = ""
     var parameters = []
 
-    sql = "SELECT * FROM appointments WHERE LIMIT %limit% OFFSET %offset%;"
+    sql = "SELECT * FROM appointments LIMIT %limit% OFFSET %offset%;"
     .replace("%limit%", limit) 
     .replace("%offset%", offset) 
+
+    db.all(sql, parameters, (error, sqlResponse) => {
+        if (error) {
+            response.status(400).json({"error":error.message})
+            return
+        }
+        return response.json({"success":sqlResponse})
+    })
+})
+
+app.post("/api/appointments/count", (request, response, next) => {
+
+    const privilege = request.body.privilege
+
+    if(privilege < 1) {
+        return response.status(400).json({"error":"insufficient permissions"})
+    }
+
+    var sql = ""
+    var parameters = []
+
+    sql = "SELECT COUNT(appointmentID) AS 'count' FROM appointments;"
 
     db.all(sql, parameters, (error, sqlResponse) => {
         if (error) {

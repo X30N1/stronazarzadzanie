@@ -1,6 +1,6 @@
 const url = "http://localhost:8000/api/accounts/login"
 
-function test() {
+function button() {
     const login = document.getElementById("inputLogin").value
     const password = document.getElementById("inputPassword").value
 
@@ -17,10 +17,8 @@ async function asyncLogin(login, password) {
     })
 
     const body = JSON.stringify({
-        request: {
-            login: login,
-            password: password
-        }      
+        login: login,
+        password: password  
     })
 
     const options = {

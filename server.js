@@ -119,33 +119,34 @@ app.post("/api/accounts/register", (request, response, next) => {
     const email = request.body.email
     const privilege = request.body.privilege
 
-    var sql = ""
-    var parameters = []
-    var hashedPwd
+    
 
     bcrypt.hash(password, saltRounds, function(error, hash) {
         if (error) {
             return response.json({"error":err})
         }
-        hashedPwd = hash
+
+        var sql = ""
+        var parameters = []
+
+        sql = "INSERT INTO accounts VALUES (null, '%login%', '%password%', '%name%', '%lname%', '%email%', %privilege%);"
+        .replace("%login%", login)
+        .replace("%password%", hash)
+        .replace("%name%", name)
+        .replace("%lname%", lname)
+        .replace("%email%", email)
+        .replace("%privilege%", privilege)
+
+        db.all(sql, parameters, (error, sqlResponse) => {
+            if (error) {
+                response.status(400).json({"error":error.message})
+                return
+            }
+            return response.json({"message":"success"})
+        })
+
     });
 
-    sql = "INSERT INTO accounts VALUES (null, '%login%', '%password%', '%name%', '%lname%', '%email%', %privilege%);"
-    .replace("%login%", login)
-    .replace("%password%", hashedPwd)
-    .replace("%name%", name)
-    .replace("%lname%", lname)
-    .replace("%email%", email)
-    .replace("%privilege%", privilege)
-
-    db.all(sql, parameters, (error, sqlResponse) => {
-        if (error) {
-            response.status(400).json({"error":error.message})
-            return
-        }
-        response.json({"success":sqlResponse})
-        response.redirect("/login")
-    })
 })
 
 app.post("/api/patients/select", (request, response, next) => {

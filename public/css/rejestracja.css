@@ -22,6 +22,15 @@ body {
     width: 450px;
 }
 
+#okno ul {
+    margin-top: 13px;
+    margin-bottom: 13px;
+}
+
+#okno li {
+    padding-top: 10px;
+}
+
 h1 {
     margin-bottom: 20px;
     font-size: 24px;

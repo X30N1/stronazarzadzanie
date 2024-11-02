@@ -53,21 +53,32 @@ async function button() {
     const passwordC = document.getElementById("inputPasswordC").value
     const privilege = 1
 
-    if(password != passwordC) {
-        document.cookie = "message = passwordCheck; SameSite = None; Max-Age = 1000; Secure; path=/register;"
-        document.getElementById("error").innerHTML = "<b>Błąd:</b> Hasła nie były identyczne."
-        return
-    }
-    else if(certcheck(password)) {
-        document.cookie = "message = certCheck; SameSite = None; Max-Age = 1000; Secure; path=/register;"
-        document.getElementById("error").innerHTML = "<b>Błąd:</b> Hasło jest zbyt proste, sprobój zrobić trudniejsze hasło."
-        return
-    }
-    else if(name == "" || lname == "" || email == "" || login == "" || password == "" || password == "") {
+    if(name == "" || lname == "" || email == "" || login == "" || password == "" || password == "") {
         document.cookie = "message = missingInput; SameSite = None; Max-Age = 1000; Secure; path=/register;"
         document.getElementById("error").innerHTML = "<b>Błąd:</b> Wszystkie pola muszą być uzupełnione."
         return
     }
+    else if(password != passwordC) {
+        document.cookie = "message = passwordCheck; SameSite = None; Max-Age = 1000; Secure; path=/register;"
+        document.getElementById("error").innerHTML = "<b>Błąd:</b> Hasła nie są identyczne."
+        return
+    }
+    else if(password.length < 12) {
+        document.cookie = "message = passwordCheck; SameSite = None; Max-Age = 1000; Secure; path=/register;"
+        document.getElementById("error").innerHTML = "<b>Błąd:</b> Hasło jest za krótkie"
+        return
+    }
+    else if(/\d/.test(password) == false) {
+        document.cookie = "message = passwordCheck; SameSite = None; Max-Age = 1000; Secure; path=/register;"
+        document.getElementById("error").innerHTML = "<b>Błąd:</b> Hasło musi zawierać co najmniej jedna cyfrę."
+        return
+    }
+    else if(certcheck(password)) { // DO NAPRAWY
+        document.cookie = "message = certCheck; SameSite = None; Max-Age = 1000; Secure; path=/register;"
+        document.getElementById("error").innerHTML = "<b>Błąd:</b> Hasło jest zbyt proste, sprobój zrobić trudniejsze hasło."
+        return
+    }
+
 
 
     console.log(name)

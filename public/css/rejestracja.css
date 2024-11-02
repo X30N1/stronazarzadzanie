@@ -67,3 +67,8 @@ h2 {
 #back a:hover{
     cursor: pointer;
 }
+
+#error {
+    color: red;
+    margin-top: 20px;
+}

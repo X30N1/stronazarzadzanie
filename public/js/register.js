@@ -1,3 +1,6 @@
+const fs = require('fs');
+const path = require('path');
+
 const url = "http://localhost:8000/api/accounts/register"
 const urlL = "http://localhost:8000/login"
 const urlR = "http://localhost:8000/register"
@@ -52,15 +55,20 @@ async function button() {
 
     if(password != passwordC) {
         document.cookie = "message = passwordCheck; SameSite = None; Max-Age = 1000; Secure; path=/register;"
-        window.location.href = urlR
+        document.getElementById("error").innerHTML = "<b>Błąd:</b> Hasła nie były identyczne."
+        return
+    }
+    else if(certcheck(password)) {
+        document.cookie = "message = certCheck; SameSite = None; Max-Age = 1000; Secure; path=/register;"
+        document.getElementById("error").innerHTML = "<b>Błąd:</b> Hasło jest zbyt proste, sprobój zrobić trudniejsze hasło."
+        return
+    }
+    else if(name == "" || lname == "" || email == "" || login == "" || password == "" || password == "") {
+        document.cookie = "message = missingInput; SameSite = None; Max-Age = 1000; Secure; path=/register;"
+        document.getElementById("error").innerHTML = "<b>Błąd:</b> Wszystkie pola muszą być uzupełnione."
         return
     }
 
-    if(name == "" || lname == "" || email == "" || login == "" || password == "" || password == "") {
-        document.cookie = "message = missingInput; SameSite = None; Max-Age = 1000; Secure; path=/register;"
-        window.location.href = urlR
-        return
-    }
 
     console.log(name)
     console.log(lname)
@@ -105,4 +113,21 @@ async function asyncRegister(name, lname, email, login, password, privilege) {
     const response = await fetch(url, options)
     const content = await response.json()
     return content
+}
+
+async function certcheck(input) {
+
+try {
+    const filecontent = fs.readFileSync(path.join(__dirname, 'wordlist_pl.txt'), 'utf-8');
+    const lines = filecontent.split('\n').map(line => line.trim());
+    if (lines.includes(input)) {
+        return true;
+    } 
+    else {
+        return false;
+    }
+} 
+catch (err) {
+    console.error('Error reading wordlist:', err);
+}
 }

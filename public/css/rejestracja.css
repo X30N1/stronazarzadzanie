@@ -57,3 +57,13 @@ h2 {
 .register-button:hover {
     background-color: #a6a6a6;
 }
+
+#back {
+    display: flex;
+    justify-content: flex-start;
+    padding-bottom: 10px;
+}
+
+#back a:hover{
+    cursor: pointer;
+}

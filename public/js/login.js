@@ -20,7 +20,7 @@ async function button() {
         window.location.href = urlD
     }
     else {
-        window.location.href = urlL
+        document.getElementById("error").innerHTML = "<b>BŁĄD:</b> Zły login bądź hasło. Sprobój ponownie." //DO NAPRAWY
     }
 }
 
@@ -43,5 +43,6 @@ async function asyncLogin(login, password) {
 
     const response = await fetch(url, options)
     const content = await response.json()
+
     return content
 }

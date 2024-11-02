@@ -61,6 +61,7 @@ main {
     margin-bottom: 10px;
 }
 
+<<<<<<< HEAD
 td {
     text-align: center;
     padding-top: 5px;
@@ -81,6 +82,16 @@ td:nth-child(1) {
 }
 
 thead > tr > td {
+=======
+#pages {
+    display: flex;
+    align-items: space-between;
+    gap: 25px;
+}
+
+.table-col {
+    width: 16%;
+>>>>>>> dd3abfd24ee79747e1e54484f5c86315861420a1
     text-align: center;
     padding-top: 5px;
     padding-bottom: 5px;

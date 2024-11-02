@@ -143,6 +143,7 @@ async function logout() {
     const response = await fetch(urlLO, {method: "GET"})
     const content = await response.json()
     if (content.message == "success") {
+        sessionStorage.clear
         window.location.href = urlLI
     }
     return content

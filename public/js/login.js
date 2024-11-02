@@ -1,6 +1,7 @@
 const url = "http://localhost:8000/api/accounts/login"
 const urlD = "http://localhost:8000/dashboard"
 const urlL = "http://localhost:8000/login"
+const urlR = "http://localhost:8000/register"
 
 async function button() {
     const login = document.getElementById("inputLogin").value
@@ -22,6 +23,10 @@ async function button() {
     else {
         document.getElementById("error").innerHTML = "<b>BŁĄD:</b> Zły login bądź hasło. Sprobój ponownie." //DO NAPRAWY
     }
+}
+
+async function toRegister() {
+    window.location.href = urlR
 }
 
 async function asyncLogin(login, password) {

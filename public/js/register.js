@@ -1,6 +1,3 @@
-const fs = require('fs');
-const path = require('path');
-
 const url = "http://localhost:8000/api/accounts/register"
 const urlL = "http://localhost:8000/login"
 const urlR = "http://localhost:8000/register"
@@ -13,7 +10,11 @@ window.onload = function() {
     }
 }
 
-function displayError(error) {
+async function toLogin() {
+    window.location.href = urlL
+}
+
+async function displayError(error) {
     switch(error) {
         case "passwordCheck":
             document.getElementById("infoMsg").innerHTML = "Błąd: Hasła nie były identyczne"
@@ -27,7 +28,7 @@ function displayError(error) {
     }
 }
 
-function getCookie(cname) {
+async function getCookie(cname) {
     let name = cname + "=";
     let decodedCookie = decodeURIComponent(document.cookie);
     let ca = decodedCookie.split(';');

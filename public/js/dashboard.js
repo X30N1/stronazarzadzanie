@@ -1,6 +1,7 @@
 const urlAA = "http://localhost:8000/api/appointments/add"
 const urlGC = "http://localhost:8000/api/appointments/count"
 const urlGA = "http://localhost:8000/api/appointments/select"
+const urlRA = "http://localhost:8000/api/appointments/remove"
 const urlPA = "http://localhost:8000/api/patients/add"
 const urlD = "http://localhost:8000/dashboard"
 const urlLO = "http://localhost:8000/api/accounts/logout"
@@ -22,7 +23,6 @@ async function nextPage() {
         currentPage += 1
         getListOfAppointments()
     }
-    
 }
 
 async function prevPage() {
@@ -58,7 +58,7 @@ async function displayAppointments(content) {
         var tdSelector = document.createElement("td")
         var selector = document.createElement("input")
         selector.type = "radio"
-        selector.name = "select-appontment"
+        selector.name = "select-appointment"
         selector.value = content[i].appointmentID
         tdSelector.appendChild(selector)
         tr.appendChild(tdSelector)
@@ -122,6 +122,19 @@ async function buttonAddAppointment() {
     }
 }
 
+async function buttonRemoveAppointment() {
+
+    const id = document.querySelector('input[name="select-appointment"]:checked').value;
+    console.log(id)
+    const privilege = sessionStorage.getItem("privilege")
+    
+    const content = await asyncRemoveAppointment(id, privilege)
+
+    if(content.message == "success") {
+        getListOfAppointments()
+    }
+}
+
 async function asyncCount(privilege) {
 
     const headers = new Headers({
@@ -162,6 +175,28 @@ async function asyncGetAppointments(limit, offset, privilege) {
     }
 
     const response = await fetch(urlGA, options)
+    const content = await response.json()
+    return content
+}
+
+async function asyncRemoveAppointment(id, privilege) { // todo
+
+    const headers = new Headers({
+        "Content-Type": "application/json"
+    })
+
+    const body = JSON.stringify({
+        id: id,
+        privilege: privilege
+    })
+
+    const options = {
+        method: "POST",
+        headers: headers,
+        body: body
+    }
+
+    const response = await fetch(urlRA, options)
     const content = await response.json()
     return content
 }

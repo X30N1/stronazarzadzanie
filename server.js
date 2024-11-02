@@ -387,6 +387,30 @@ app.post("/api/appointments/update", (request, response, next) => {
     })
 })
 
+app.post("/api/appointments/remove", (request, response, next) => {
+
+    const privilege = request.body.privilege
+    const appointmentID = request.body.id
+
+    if(privilege < 1) {
+        return response.status(400).json({"error":"insufficient permissions"})
+    }
+
+    var sql = ""
+    var parameters = []
+
+    sql = "DELETE FROM appointments WHERE appointmentID = %appointmentID%;"
+    .replace("%appointmentID%", appointmentID)
+    
+    db.all(sql, parameters, (error, sqlResponse) => {
+        if (error) {
+            response.status(400).json({"error":error.message})
+            return
+        }
+        return response.json({"message":"success"})
+    })
+})
+
 app.use(function(request, response){
     response.status(404).json({"error":"404"})
     return

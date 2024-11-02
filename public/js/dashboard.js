@@ -6,19 +6,94 @@ const urlD = "http://localhost:8000/dashboard"
 const urlLO = "http://localhost:8000/api/accounts/logout"
 const urlLI = "http://localhost:8000/login"
 
+var currentPage = 1
+var maxPages = 1
+
 window.onload = async function() {
-    console.log(sessionStorage)
+
     document.getElementById("welcome").innerHTML = "Witaj " + sessionStorage.getItem("name")
 
+    getListOfAppointments()
+
+}
+
+async function nextPage() {
+    if(currentPage < maxPages) {
+        currentPage += 1
+        getListOfAppointments()
+    }
+    
+}
+
+async function prevPage() {
+    if(currentPage > 2) {
+        currentPage -= 1
+        getListOfAppointments()
+    }
+}
+
+async function getListOfAppointments() {
+    
     var count = await asyncCount(sessionStorage.privilege)
     count = Number(count.success[0].count)
     var maxPerPage = document.getElementById("display-count").value
     console.log(maxPerPage)
-    var maxPages = 1 + Math.floor(count / maxPerPage) 
-    document.getElementById("count").innerHTML = "Strona 1/" + maxPages + " (ilośc pól: " + count + ")"
+    maxPages = 1 + Math.floor(count / maxPerPage) 
+    document.getElementById("count").innerHTML = "Strona " + currentPage + "/" + maxPages + " (ilość pól: " + count + ")"
 
-    var content = await asyncGetAppointments(maxPerPage, (maxPages - 1), sessionStorage.getItem("privilege"))
-    console.log(content)
+    var content = await asyncGetAppointments(maxPerPage, (currentPage - 1), sessionStorage.getItem("privilege"))
+
+    displayAppointments(content.success)
+
+}
+
+async function displayAppointments(content) {
+    if(document.getElementById("table-data") != null) {
+        document.getElementById("table-data").remove()
+    }
+    var test = document.createElement("tbody")
+    test.id = "table-data"
+    for(i in content) {
+        var tr = document.createElement("tr")
+        var tdSelector = document.createElement("td")
+        var selector = document.createElement("input")
+        selector.type = "radio"
+        selector.name = "select-appontment"
+        selector.value = content[i].appointmentID
+        tdSelector.appendChild(selector)
+        tr.appendChild(tdSelector)
+
+        for(j = 0; j < 6; j++) {
+            var element = document.createElement("td")
+            switch(j) {
+                case 0:
+                    var text = document.createTextNode(content[i].patientName)
+                    break
+                case 1:
+                    var text = document.createTextNode(content[i].patientLName)
+                    break
+                case 2:
+                    var text = document.createTextNode(content[i].appointmentDate)
+                    break
+                case 3:
+                    var text = document.createTextNode(content[i].appointmentTime)
+                    break
+                case 4:
+                    var text = document.createTextNode(content[i].patientContact)
+                    break
+                case 5:
+                    var text = document.createTextNode(content[i].appointmentStatus)
+                    break
+            }
+            
+            element.appendChild(text)
+            tr.appendChild(element)
+        }
+
+        
+        test.appendChild(tr)
+    }
+    document.getElementById("table").append(test)
 }
 
 async function buttonAddAppointment() {

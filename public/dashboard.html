@@ -22,20 +22,44 @@
     <main id="main-content">
         <div class="table-container">
             <div class="table-header">
-                <div class="table-col">Imię</div>
-                <div class="table-col">Nazwisko</div>
-                <div class="table-col">Data</div>
-                <div class="table-col">Godzina</div>
-                <div class="table-col">Telefon</div>
-                <div class="table-col">Status</div>
+                <input type="button" onclick="prevPage()" value="Poprzednia Strona">
+                <input type="button" onclick="nextPage()" value="Następna Strona">
             </div>
             <div class="table-content">
-                <h1>TUTAJ TABLICA</h1>
+                <table id="table">
+                    <thead>
+                        <td>
+                            
+                        </td>
+                        <td>
+                            Imię
+                        </td>
+                        <td>
+                            Nazwisko
+                        </td>
+                        <td>
+                            Data
+                        </td>
+                        <td>
+                            Godzina
+                        </td>
+                        <td>
+                            Kontakt
+                        </td>
+                        <td>
+                            Status
+                        </td>
+                    </thead>
+                </table>
             </div>
             <div class="table-footer">
                 <span id="count">Strona 1/1 (ilość pól: 0)</span>
+<<<<<<< HEAD
+                <span>Wyświetl: <select id="display-count" onchange="getListOfAppointments()"> <!-- IMPLEMENTACJA DO ZROBIENIA -->
+=======
                 <div id="pages"><input id="ppage" type="button" value="Poprzednia strona"> <input id="npage" type="button" value="Następna strona"></div>
                 <span>Wyświetl: <select id="display-count"> <!-- IMPLEMENTACJA DO ZROBIENIA -->
+>>>>>>> dd3abfd24ee79747e1e54484f5c86315861420a1
                     <option value="10">10</option>
                     <option value="25">25</option>
                     <option value="50" selected>50</option>

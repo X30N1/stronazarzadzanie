@@ -72,6 +72,12 @@ app.post("/api/accounts/login", (request, response, next) => {
             response.status(400).json({"error":error.message})
             return
         }
+        if(sqlResponse.length == 0) {
+            response.json({
+                "message": "doesntExist"
+            })
+            return
+        }
 
         var hash = sqlResponse[0].password
         var name = sqlResponse[0].name

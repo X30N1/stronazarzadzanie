@@ -289,7 +289,7 @@ app.post("/api/appointments/select", (request, response, next) => {
     var sql = ""
     var parameters = []
 
-    sql = "SELECT * FROM appointments LIMIT %limit% OFFSET %offset%;"
+    sql = "SELECT a.appointmentid, a.appointmentDate, a.appointmentTime, a.appointmentStatus, p.patientName, p.patientLName, p.patientContact FROM appointments AS a INNER JOIN patients AS p ON a.patientID = p.patientID LIMIT %limit% OFFSET %offset%;"
     .replace("%limit%", limit) 
     .replace("%offset%", offset)
 

@@ -105,9 +105,10 @@ app.get("/api/accounts/logout", (request, response) => {
     request.session.destroy((err) => {
         if (err) {
             console.log(err)
+            response.json({"message":"failure"})
         }
         else {
-            response.redirect("/login")
+            response.json({"message":"success"})
         }
     })
 })

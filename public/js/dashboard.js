@@ -3,6 +3,8 @@ const urlGC = "http://localhost:8000/api/appointments/count"
 const urlGA = "http://localhost:8000/api/appointments/select"
 const urlPA = "http://localhost:8000/api/patients/add"
 const urlD = "http://localhost:8000/dashboard"
+const urlLO = "http://localhost:8000/api/accounts/logout"
+const urlLI = "http://localhost:8000/login"
 
 window.onload = async function() {
     console.log(sessionStorage)
@@ -134,5 +136,14 @@ async function asyncAddPatient(name, lname, contact, privilege) {
 
     const response = await fetch(urlPA, options)
     const content = await response.json()
+    return content
+}
+async function logout() {
+
+    const response = await fetch(urlLO, {method: "GET"})
+    const content = await response.json()
+    if (content.message == "success") {
+        window.location.href = urlLI
+    }
     return content
 }

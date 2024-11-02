@@ -61,6 +61,12 @@ main {
     margin-bottom: 10px;
 }
 
+#pages {
+    display: flex;
+    align-items: space-between;
+    gap: 25px;
+}
+
 .table-col {
     width: 16%;
     text-align: center;

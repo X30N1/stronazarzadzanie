@@ -1,5 +1,6 @@
 const urlAA = "http://localhost:8000/api/appointments/add"
 const urlGC = "http://localhost:8000/api/appointments/count"
+const urlGA = "http://localhost:8000/api/appointments/select"
 const urlPA = "http://localhost:8000/api/patients/add"
 const urlD = "http://localhost:8000/dashboard"
 
@@ -12,9 +13,10 @@ window.onload = async function() {
     var maxPerPage = document.getElementById("display-count").value
     console.log(maxPerPage)
     var maxPages = 1 + Math.floor(count / maxPerPage) 
-    document.getElementById("count").innerHTML = "Strona 1/" + maxPages + " (" + count + " pól)"
+    document.getElementById("count").innerHTML = "Strona 1/" + maxPages + " (ilośc pól: " + count + ")"
 
-    // Wczytanie tablicy
+    var content = await asyncGetAppointments(maxPerPage, (maxPages - 1), sessionStorage.getItem("privilege"))
+    console.log(content)
 }
 
 async function buttonAddAppointment() {
@@ -29,12 +31,18 @@ async function buttonAddAppointment() {
     const content = await asyncAddPatient(name, lname, contact, privilege)
     console.log(content)
 
-    // if(content.message = "success") {
-    //     window.location.href = urlD
-    // }
-    // else {
-    //     window.location.href = urlD
-    // }
+    const id = content.success[0].patientID
+    console.log(id)
+
+    if(content.message != "success") {
+        window.location.href = urlD
+    }
+    
+    const content2 = await asyncAddAppointment(id, date, time, privilege)
+
+    if(content.message == "success") {
+        window.location.href = urlD
+    }
 }
 
 async function asyncCount(privilege) {
@@ -58,7 +66,30 @@ async function asyncCount(privilege) {
     return content
 }
 
-async function asyncAddAppointment(name, patientID, date, time, privilege) {
+async function asyncGetAppointments(limit, offset, privilege) {
+
+    const headers = new Headers({
+        "Content-Type": "application/json"
+    })
+
+    const body = JSON.stringify({
+        privilege: privilege,
+        limit: limit,
+        offset: offset
+    })
+
+    const options = {
+        method: "POST",
+        headers: headers,
+        body: body
+    }
+
+    const response = await fetch(urlGA, options)
+    const content = await response.json()
+    return content
+}
+
+async function asyncAddAppointment(patientID, date, time, privilege) {
 
     const headers = new Headers({
         "Content-Type": "application/json"

@@ -79,7 +79,7 @@ app.post("/api/accounts/login", (request, response, next) => {
         var privilege = sqlResponse[0].privilege
 
         bcrypt.compare(password, hash, function(err, result) {
-            if(!result) {
+            if(!result || err) {
                 response.json({"message":"failure"})
                 return
             }
@@ -206,7 +206,10 @@ app.post("/api/patients/add", (request, response, next) => { // Masakra, pewnie 
         }
 
         if(sqlResponse.length != 0) {
-            response.json({"success":sqlResponse})
+            response.json({
+                "message": "success",
+                "success":sqlResponse
+            })
             return
         }
 
@@ -224,7 +227,10 @@ app.post("/api/patients/add", (request, response, next) => { // Masakra, pewnie 
                     return
                 }
                 
-                response.json({"success":sqlResponse3})
+                response.json({
+                    "message": "success",
+                    "success":sqlResponse3
+                })
                 return
 
             })
@@ -265,6 +271,11 @@ app.post("/api/patients/update", (request, response, next) => {
 app.post("/api/appointments/select", (request, response, next) => {
 
     const privilege = request.body.privilege
+    
+    if(privilege < 1) {
+        return response.status(400).json({"error":"insufficient permissions"})
+    }
+
     const limit = request.body.limit
     const offset = request.body.offset * limit
 
@@ -273,7 +284,7 @@ app.post("/api/appointments/select", (request, response, next) => {
 
     sql = "SELECT * FROM appointments LIMIT %limit% OFFSET %offset%;"
     .replace("%limit%", limit) 
-    .replace("%offset%", offset) 
+    .replace("%offset%", offset)
 
     db.all(sql, parameters, (error, sqlResponse) => {
         if (error) {
@@ -311,9 +322,9 @@ app.post("/api/appointments/add", (request, response, next) => {
 
     const privilege = request.body.privilege
     const patientID = request.body.patientID
-    const appointmentDate = request.body.appointmentDate
-    const appointmentTime = request.body.appointmentTime
-    const appointmentStatus = request.body.appointmentStatus
+    const appointmentDate = request.body.date
+    const appointmentTime = request.body.time
+    const appointmentStatus = "Zaplanowane"
 
     if(privilege < 1) {
         return response.status(400).json({"error":"insufficient permissions"})
@@ -325,8 +336,8 @@ app.post("/api/appointments/add", (request, response, next) => {
     sql = "INSERT INTO appointments VALUES (null, %patientID%, '%appointmentDate%', '%appointmentTime%', '%appointmentStatus%');"
     .replace("%patientID%", patientID)
     .replace("%appointmentDate%", appointmentDate)
-    .replace("%appointmentTime", appointmentTime)
-    .replace("%appointmentStatus", appointmentStatus)
+    .replace("%appointmentTime%", appointmentTime)
+    .replace("%appointmentStatus%", appointmentStatus)
 
     db.all(sql, parameters, (error, sqlResponse) => {
         if (error) {
@@ -356,8 +367,8 @@ app.post("/api/appointments/update", (request, response, next) => {
     sql = "UPDATE appointments SET patientID = %patientID%, appointmentDate = '%appointmentDate%', appointmentTime = '%appointmentTime%', appointmentStatus = '%appointmentStatus%' WHERE appointmentID = %appointmentID%;"
     .replace("%patientID%", patientID)
     .replace("%appointmentDate%", appointmentDate)
-    .replace("%appointmentTime", appointmentTime)
-    .replace("%appointmentStatus", appointmentStatus)
+    .replace("%appointmentTime%", appointmentTime)
+    .replace("%appointmentStatus%", appointmentStatus)
     .replace("%appointmentID%", appointmentID)
 
     db.all(sql, parameters, (error, sqlResponse) => {

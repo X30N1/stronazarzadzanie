@@ -12,7 +12,7 @@ async function button() {
     const content = await asyncLogin(login, password)
     console.log(content)
 
-    if(content.message = "success") {
+    if(content.message == "success") {
         sessionStorage.setItem("login", login)
         sessionStorage.setItem("name", content.name)
         sessionStorage.setItem("lname", content.lname)

@@ -1,6 +1,7 @@
 const urlAA = "http://localhost:8000/api/appointments/add"
 const urlGC = "http://localhost:8000/api/appointments/count"
 const urlGA = "http://localhost:8000/api/appointments/select"
+const urlUA = "http://localhost:8000/api/appointments/update"
 const urlRA = "http://localhost:8000/api/appointments/remove"
 const urlPA = "http://localhost:8000/api/patients/add"
 const urlD = "http://localhost:8000/dashboard"
@@ -9,6 +10,7 @@ const urlLI = "http://localhost:8000/login"
 
 var currentPage = 1
 var maxPages = 1
+var data = {}
 
 window.onload = async function() {
 
@@ -42,8 +44,9 @@ async function getListOfAppointments() {
     document.getElementById("count").innerHTML = "Strona " + currentPage + "/" + maxPages + " (ilość pól: " + count + ")"
 
     var content = await asyncGetAppointments(maxPerPage, (currentPage - 1), sessionStorage.getItem("privilege"))
+    data = content.success
 
-    displayAppointments(content.success)
+    displayAppointments(data)
 
 }
 
@@ -112,20 +115,73 @@ async function buttonAddAppointment() {
     console.log(id)
 
     if(content.message != "success") {
-        window.location.href = urlD
+        getListOfAppointments()
     }
     
     const content2 = await asyncAddAppointment(id, date, time, privilege)
 
     if(content.message == "success") {
-        window.location.href = urlD
+        getListOfAppointments()
+    }
+}
+
+async function showEdit() {
+    document.getElementById("func-save-button").style.display = "none";
+    document.getElementById("func-edit-button").style.display = "block";
+
+    console.log("omegalul");
+    console.log(document.querySelector('input[name="select-appointment"]:checked').value);
+
+    var selectedData = data.find((element => element.appointmentID == document.querySelector('input[name="select-appointment"]:checked').value))
+    
+    document.getElementById("inputName").value = selectedData.patientName;
+    document.getElementById("inputLName").value = selectedData.patientLName;
+    document.getElementById("inputContact").value = selectedData.patientContact;
+    document.getElementById("inputDate").value = selectedData.appointmentDate;
+    document.getElementById("inputTime").value = selectedData.appointmentTime;
+}
+
+async function showSave() {
+    document.getElementById("func-save-button").style.display = "block";
+    document.getElementById("func-edit-button").style.display = "none";
+
+    document.getElementById("inputName").value = '';
+    document.getElementById("inputLName").value = '';
+    document.getElementById("inputContact").value = '';
+    document.getElementById("inputDate").value = '';
+    document.getElementById("inputTime").value = '';
+}
+
+async function buttonEditAppointment() {
+
+    const appointmentId = document.querySelector('input[name="select-appointment"]:checked').value
+    const name = document.getElementById("inputName").value
+    const lname = document.getElementById("inputLName").value
+    const contact = document.getElementById("inputContact").value
+    const date = document.getElementById("inputDate").value
+    const time = document.getElementById("inputTime").value
+    const privilege = sessionStorage.getItem("privilege")
+
+    const content = await asyncAddPatient(name, lname, contact, privilege)
+    console.log(content)
+
+    const id = content.success[0].patientID
+    console.log(id)
+
+    if(content.message != "success") {
+        getListOfAppointments()
+    }
+    
+    const content2 = await asyncEditAppointment(appointmentId, id, date, time, privilege)
+
+    if(content.message == "success") {
+        getListOfAppointments()
     }
 }
 
 async function buttonRemoveAppointment() {
 
     const id = document.querySelector('input[name="select-appointment"]:checked').value;
-    console.log(id)
     const privilege = sessionStorage.getItem("privilege")
     
     const content = await asyncRemoveAppointment(id, privilege)
@@ -221,6 +277,33 @@ async function asyncAddAppointment(patientID, date, time, privilege) {
     }
 
     const response = await fetch(urlAA, options)
+    const content = await response.json()
+    return content
+}
+
+
+
+async function asyncEditAppointment(appointmentID, patientID, date, time, privilege) {
+
+    const headers = new Headers({
+        "Content-Type": "application/json"
+    })
+
+    const body = JSON.stringify({
+        appointmentID: appointmentID,
+        patientID: patientID,
+        date: date,
+        time: time,
+        privilege: privilege
+    })
+
+    const options = {
+        method: "POST",
+        headers: headers,
+        body: body
+    }
+
+    const response = await fetch(urlUA, options)
     const content = await response.json()
     return content
 }

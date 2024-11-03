@@ -64,8 +64,8 @@
 
         <div class="buttons-container">
             <button class="delete-button" onclick="buttonRemoveAppointment()">Usuń wizytę</button>
-            <button class="edit-button">Edytuj wizytę</button>
-            <button class="add-button" id="add-visit-btn">Dodaj wizytę</button>
+            <button class="edit-button" id="edit-visit-btn" onclick="showEdit()">Edytuj wizytę</button>
+            <button class="add-button" id="add-visit-btn" onclick="showAdd()">Dodaj wizytę</button>
         </div>
     </main>
 
@@ -89,7 +89,8 @@
                 <label for="time">Godzina</label>
                 <input type="time" id="inputTime" name="time">
                 
-                <input type="button" class="save-button" onclick="buttonAddAppointment()" value="Zapisz"></input>
+                <input type="button" id="func-save-button" class="save-button" onclick="buttonAddAppointment()" value="Dodaj"></input>
+                <input type="button" id="func-edit-button" class="edit-button" onclick="buttonEditAppointment()" value="Edytuj"></input>
             </form>
         </div>
     </div>

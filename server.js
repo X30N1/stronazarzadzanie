@@ -360,9 +360,9 @@ app.post("/api/appointments/update", (request, response, next) => {
     const privilege = request.body.privilege
     const appointmentID = request.body.appointmentID
     const patientID = request.body.patientID
-    const appointmentDate = request.body.appointmentDate
-    const appointmentTime = request.body.appointmentTime
-    const appointmentStatus = request.body.appointmentStatus
+    const appointmentDate = request.body.date
+    const appointmentTime = request.body.time
+    const appointmentStatus = request.body.status
 
     if(privilege < 1) {
         return response.status(400).json({"error":"insufficient permissions"})

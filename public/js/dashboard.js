@@ -47,6 +47,7 @@ async function getListOfAppointments() {
     data = content.success
 
     displayAppointments(data)
+    closePopup();
 
 }
 
@@ -125,7 +126,23 @@ async function buttonAddAppointment() {
     }
 }
 
+async function closePopup() {
+    const popupOverlay = document.getElementById('popup-overlay');
+    const mainContent = document.getElementById('main-content');
+    popupOverlay.style.display = 'none';
+    mainContent.classList.remove('blur');
+}
+
+async function showPopup() {
+    const popupOverlay = document.getElementById('popup-overlay');
+    const mainContent = document.getElementById('main-content');
+    popupOverlay.style.display = 'flex';
+    mainContent.classList.add('blur');
+}
+
 async function showEdit() {
+
+    showPopup();
 
     document.getElementById("func-save-button").style.display = "none";
     document.getElementById("func-edit-button").style.display = "block";
@@ -133,7 +150,7 @@ async function showEdit() {
     console.log("omegalul");
     console.log(document.querySelector('input[name="select-appointment"]:checked').value);
 
-    var list = document.getElementsByClassName("show-edit");
+    var list = document.getElementsByClassName("display-edit");
     for(i = 0; i < list.length; i++) {
         list[i].style.display = "block";
     }
@@ -149,12 +166,15 @@ async function showEdit() {
 
 }
 
-async function showSave() {
+async function showAdd() {
+
+    showPopup();
 
     document.getElementById("func-save-button").style.display = "block";
     document.getElementById("func-edit-button").style.display = "none";
     
-    var list = document.getElementsByClassName("show-edit");
+    var list = document.getElementsByClassName("display-edit");
+    console.log(list)
     for(i = 0; i < list.length; i++) {
         list[i].style.display = "none";
     }
@@ -188,7 +208,7 @@ async function buttonEditAppointment() {
         getListOfAppointments()
     }
     
-    const content2 = await asyncEditAppointment(appointmentId, id, date, time, privilege, status)
+    const content2 = await asyncEditAppointment(appointmentId, id, date, time, status, privilege)
 
     if(content2.message == "success") {
         getListOfAppointments()
@@ -299,7 +319,7 @@ async function asyncAddAppointment(patientID, date, time, privilege) {
 
 
 
-async function asyncEditAppointment(appointmentID, patientID, date, time, privilege, status) {
+async function asyncEditAppointment(appointmentID, patientID, date, time, status, privilege) {
 
     const headers = new Headers({
         "Content-Type": "application/json"

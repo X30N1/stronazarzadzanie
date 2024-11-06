@@ -271,8 +271,9 @@ app.post("/api/patients/update", (request, response, next) => {
             response.status(400).json({"error":error.message})
             return
         }
-        return response.json({"success":sqlResponse})
+        return response.json({"message":"success"})
     })
+
 })
 
 app.post("/api/appointments/select", (request, response, next) => {
@@ -289,7 +290,7 @@ app.post("/api/appointments/select", (request, response, next) => {
     var sql = ""
     var parameters = []
 
-    sql = "SELECT a.appointmentid, a.appointmentDate, a.appointmentTime, a.appointmentStatus, p.patientName, p.patientLName, p.patientContact FROM appointments AS a INNER JOIN patients AS p ON a.patientID = p.patientID LIMIT %limit% OFFSET %offset%;"
+    sql = "SELECT a.appointmentid, a.appointmentDate, a.appointmentTime, a.appointmentStatus, p.patientName, p.patientLName, p.patientContact FROM appointments AS a INNER JOIN patients AS p ON a.patientID = p.patientID ORDER BY a.appointmentDate DESC, a.appointmentTime DESC LIMIT %limit% OFFSET %offset%;"
     .replace("%limit%", limit) 
     .replace("%offset%", offset)
 
@@ -383,7 +384,7 @@ app.post("/api/appointments/update", (request, response, next) => {
             response.status(400).json({"error":error.message})
             return
         }
-        return response.json({"success":sqlResponse})
+        return response.json({"message":"success"})
     })
 })
 

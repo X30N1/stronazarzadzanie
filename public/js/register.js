@@ -74,11 +74,11 @@ async function button() {
         document.getElementById("error").innerHTML = "<b>Błąd:</b> Hasło musi zawierać co najmniej jedna cyfrę."
         return
     }
-    else if(certcheck(password)) { // DO NAPRAWY
-        document.cookie = "message = certCheck; SameSite = None; Max-Age = 1000; Secure; path=/register;"
-        document.getElementById("error").innerHTML = "<b>Błąd:</b> Hasło jest zbyt proste, sprobój zrobić trudniejsze hasło."
-        return
-    }
+    //else if(certcheck(password)) { // DO NAPRAWY
+        //document.cookie = "message = certCheck; SameSite = None; Max-Age = 1000; Secure; path=/register;"
+        //document.getElementById("error").innerHTML = "<b>Błąd:</b> Hasło jest zbyt proste, sprobój zrobić trudniejsze hasło."
+        //return
+    //}
 
 
 

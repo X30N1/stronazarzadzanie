@@ -47,6 +47,7 @@ async function getListOfAppointments() {
     data = content.success
 
     displayAppointments(data)
+    closePopup();
 
 }
 
@@ -125,12 +126,34 @@ async function buttonAddAppointment() {
     }
 }
 
+async function closePopup() {
+    const popupOverlay = document.getElementById('popup-overlay');
+    const mainContent = document.getElementById('main-content');
+    popupOverlay.style.display = 'none';
+    mainContent.classList.remove('blur');
+}
+
+async function showPopup() {
+    const popupOverlay = document.getElementById('popup-overlay');
+    const mainContent = document.getElementById('main-content');
+    popupOverlay.style.display = 'flex';
+    mainContent.classList.add('blur');
+}
+
 async function showEdit() {
+
+    showPopup();
+
     document.getElementById("func-save-button").style.display = "none";
     document.getElementById("func-edit-button").style.display = "block";
 
     console.log("omegalul");
     console.log(document.querySelector('input[name="select-appointment"]:checked').value);
+
+    var list = document.getElementsByClassName("display-edit");
+    for(i = 0; i < list.length; i++) {
+        list[i].style.display = "block";
+    }
 
     var selectedData = data.find((element => element.appointmentID == document.querySelector('input[name="select-appointment"]:checked').value))
     
@@ -139,17 +162,29 @@ async function showEdit() {
     document.getElementById("inputContact").value = selectedData.patientContact;
     document.getElementById("inputDate").value = selectedData.appointmentDate;
     document.getElementById("inputTime").value = selectedData.appointmentTime;
+    document.getElementById("inputStatus").value = selectedData.appointmentStatus;
+
 }
 
-async function showSave() {
+async function showAdd() {
+
+    showPopup();
+
     document.getElementById("func-save-button").style.display = "block";
     document.getElementById("func-edit-button").style.display = "none";
+    
+    var list = document.getElementsByClassName("display-edit");
+    console.log(list)
+    for(i = 0; i < list.length; i++) {
+        list[i].style.display = "none";
+    }
 
     document.getElementById("inputName").value = '';
     document.getElementById("inputLName").value = '';
     document.getElementById("inputContact").value = '';
     document.getElementById("inputDate").value = '';
     document.getElementById("inputTime").value = '';
+
 }
 
 async function buttonEditAppointment() {
@@ -160,6 +195,7 @@ async function buttonEditAppointment() {
     const contact = document.getElementById("inputContact").value
     const date = document.getElementById("inputDate").value
     const time = document.getElementById("inputTime").value
+    const status = document.getElementById("inputStatus").value
     const privilege = sessionStorage.getItem("privilege")
 
     const content = await asyncAddPatient(name, lname, contact, privilege)
@@ -172,9 +208,9 @@ async function buttonEditAppointment() {
         getListOfAppointments()
     }
     
-    const content2 = await asyncEditAppointment(appointmentId, id, date, time, privilege)
+    const content2 = await asyncEditAppointment(appointmentId, id, date, time, status, privilege)
 
-    if(content.message == "success") {
+    if(content2.message == "success") {
         getListOfAppointments()
     }
 }
@@ -283,7 +319,7 @@ async function asyncAddAppointment(patientID, date, time, privilege) {
 
 
 
-async function asyncEditAppointment(appointmentID, patientID, date, time, privilege) {
+async function asyncEditAppointment(appointmentID, patientID, date, time, status, privilege) {
 
     const headers = new Headers({
         "Content-Type": "application/json"
@@ -294,6 +330,7 @@ async function asyncEditAppointment(appointmentID, patientID, date, time, privil
         patientID: patientID,
         date: date,
         time: time,
+        status: status,
         privilege: privilege
     })
 

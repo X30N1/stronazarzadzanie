@@ -6,8 +6,6 @@ window.addEventListener("DOMContentLoaded", (event) => {
     const popupOverlay = document.getElementById('popup-overlay');
     const closePopupBtn = document.getElementById('close-popup-btn');
     const mainContent = document.getElementById('main-content');
-    const saveBtn = document.getElementById("func-save-button")
-    const editBtn = document.getElementById("func-edit-button")
 
     // Okienko & blur
     addVisitBtn.addEventListener('click', () => {

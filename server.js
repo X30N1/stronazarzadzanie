@@ -153,7 +153,121 @@ app.post("/api/accounts/register", (request, response, next) => {
         })
 
     });
+})
 
+app.post("/api/accounts/update", (request, response, next) => {
+
+    const privilege = request.body.privilege
+    const id = request.body.patientID
+    const name = request.body.patientName
+    const lname = request.body.patientLName
+    const email = request.body.patientContact
+
+    if(privilege < 2) {
+        return response.status(400).json({"error":"insufficient permissions"})
+    }
+
+    var sql = ""
+    var parameters = []
+
+    sql = "UPDATE accounts SET name = '%name%', lname = '%lname%', email = '%email%' WHERE accountID = %id%;"
+    .replace("%name%", name)
+    .replace("%lname%", lname)
+    .replace("%email%", email)
+    .replace("%id%", id)
+
+    db.all(sql, parameters, (error, sqlResponse) => {
+        if (error) {
+            response.status(400).json({"error":error.message})
+            return
+        }
+        return response.json({"message":"success"})
+    })
+    });
+
+app.post("/api/patients/register", (request, response, next) => {
+
+    const login = request.body.login
+    const password = request.body.password
+    const name = request.body.name
+    const lname = request.body.lname
+    const email = request.body.email
+    const contact = request.body.contact
+
+    bcrypt.hash(password, saltRounds, function(error, hash) {
+        if (error) {
+            return response.json({"error":err})
+        }
+
+        var sql = ""
+        var parameters = []
+
+        sql = "INSERT INTO patients VALUES (null, '%login%', '%password%', '%name%', '%lname%', '%email%', '%contact%');"
+        .replace("%login%", login)
+        .replace("%password%", hash)
+        .replace("%name%", name)
+        .replace("%lname%", lname)
+        .replace("%email%", email)
+        .replace("%contact%", contact)
+
+        db.all(sql, parameters, (error, sqlResponse) => {
+            if (error) {
+                response.status(400).json({"error":error.message})
+                return
+            }
+            return response.json({"message":"success"})
+        })
+
+    });
+})
+
+app.post("/api/patients/login", (request, response, next) => {
+
+    const login = request.body.login
+    const password = request.body.password
+
+    var sql = ""
+    var parameters = []
+
+    sql = "SELECT patientPassword, patientName, patientLName FROM patients WHERE patientLogin = '%login%';"
+    .replace("%login%", login) 
+
+    db.all(sql, parameters, (error, sqlResponse) => {
+        if (error) {
+            response.status(400).json({"error":error.message})
+            return
+        }
+        if(sqlResponse.length == 0) {
+            response.json({
+                "message": "doesntExist"
+            })
+            return
+        }
+
+        var hash = sqlResponse[0].password
+        var name = sqlResponse[0].name
+        var lname = sqlResponse[0].lname
+
+        bcrypt.compare(password, hash, function(err, result) {
+            if(!result || err) {
+                response.json({"message":"failure"})
+                return
+            }
+            request.session.isPatientLoggedIn = true
+            request.session.login = login
+            request.session.name = name
+            request.session.lname = lname
+            request.session.privilege = privilege
+    
+            response.json({
+                "message":"success",
+                login: login,
+                name: name,
+                lname: lname
+            })
+            return
+        })
+    })
 })
 
 app.post("/api/patients/select", (request, response, next) => {
@@ -260,7 +374,7 @@ app.post("/api/patients/update", (request, response, next) => {
     var sql = ""
     var parameters = []
 
-    sql = "INSERT patients SET patientName = '%patientName%', patientLName = '%patientLName%', patientContact = '%patientContact%' WHERE patientID = %patientID%;"
+    sql = "UPDATE patients SET patientName = '%patientName%', patientLName = '%patientLName%', patientContact = '%patientContact%' WHERE patientID = %patientID%;"
     .replace("%patientName", patientName)
     .replace("%patientLName%", patientLName)
     .replace("%patientContact%", patientContact)

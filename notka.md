@@ -8,19 +8,19 @@ Wiec no :P
 - Czy na pewno chcesz usunąć wpis? (popup)
 
 >[!CAUTION]
->- Trzeba dodać pola pacjentów do bazy danych / rejestracji itp. Wtedy trzeba też przełożyć rejesrację pacjentów na oddzielne okno na rejestrację pacjentów.
->- Pacjent może się zarejestrować
->- Konto admin
->- Baza danych i okno do zarządzania pacjentami (relacja bazy spotkań do bazy wizyt)
->- Zarządzanie kontami dla admina
->- Pacjent może zarejestrować sam wizytę u lekarza
->- Pacjent może zobaczyć swoje wizyty przyszłe i przeszłe
->- Lekarz może zarezerwować wizytę dla pacjenta.
->- Lekarz może zobaczyć wizyty przyszłe i przeszłe
+>- Trzeba dodać pola pacjentów do bazy danych / rejestracji itp. Wtedy trzeba też przełożyć rejesrację pacjentów na oddzielne okno na rejestrację pacjentów. [Done]
+>- Pacjent może się zarejestrować [Backend Done]
+>- Konto admin [Kwestia zrobienia konta]
+>- Baza danych i okno do zarządzania pacjentami (relacja bazy spotkań do bazy wizyt) - weś ktoś wytłumacz xd, bo zdaje mi sie ze backendowo done
+>- Zarządzanie kontami dla admina [Backend Done]
+>- Pacjent może zarejestrować sam wizytę u lekarza [Backend Done]
+>- Pacjent może zobaczyć swoje wizyty przyszłe i przeszłe [Backend Done]
+>- Lekarz może zarezerwować wizytę dla pacjenta. [Done]
+>- Lekarz może zobaczyć wizyty przyszłe i przeszłe [Done]
 >- Lekarz może zobaczyć wizyty pacjentów tylko takich, którzy mieli u niego zarejestowane.
->- Lekarzy więcej niż jeden.
->- Lekarz może zobaczyć swoje dane i edytować
->- Pacjent może zobaczyć swoje dane i edytować
->- Lekarz może nanosić uwagi do wizyty
+>- Lekarzy więcej niż jeden. [Done]
+>- Lekarz może zobaczyć swoje dane i edytować [Backend Done (wyjatek zmiana hasla)]
+>- Pacjent może zobaczyć swoje dane i edytować [Backend Done]
+>- Lekarz może nanosić uwagi do wizyty [Done/Dodac uwagi ale mamy status lol]
 >- 1 wizyta trwa 30 minut
 >- Lekarz pracuje pon-pt, godzina 8:00-16:00 oraz w co drugą sobotę 8:00-12:00.

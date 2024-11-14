@@ -119,6 +119,27 @@ app.get("/api/accounts/logout", (request, response) => {
     })
 })
 
+app.get("api/accounts/certcheck", (request, response) => {
+
+    const password = request.body.password
+    sql = ("SELECT * FROM passwords WHERE password = '%password%';")
+        .replace("%password%", password)
+
+    db.certchecker.all(sql, (error, sqlResponse) => {
+        if (error) {
+            response.status(400).json({"error":error.message})
+            return
+        }
+        else if(sqlResponse.length == 0) {
+            return response.json({"message": "success"})
+        }
+        else {
+            return response.json({"message": "failure"})
+        }
+    });
+
+});
+
 app.post("/api/accounts/register", (request, response, next) => {
 
     const login = request.body.login

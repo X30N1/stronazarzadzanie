@@ -8,7 +8,7 @@ Wiec no :P
 - Czy na pewno chcesz usunąć wpis? (popup)
 
 >[!CAUTION]
->- Trzeba dodać pola pacjentów do bazy danych / rejestracji itp. Wtedy trzeba też przełożyć rejesrację pacjentów na oddzielne okno na rejestrację pacjentów. [Done]
+>- Trzeba dodać pola pacjentów do bazy danych / rejestracji itp. Wtedy trzeba też przełożyć rejesrację pacjentów na oddzielne okno na rejestrację pacjentów. [backend done]
 >- Pacjent może się zarejestrować [Backend Done]
 >- Konto admin [Kwestia zrobienia konta]
 >- Baza danych i okno do zarządzania pacjentami (relacja bazy spotkań do bazy wizyt) - weś ktoś wytłumacz xd, bo zdaje mi sie ze backendowo done

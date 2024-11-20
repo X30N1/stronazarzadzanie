@@ -1,4 +1,5 @@
 const url = "http://localhost:8000/api/accounts/register"
+const urlPC = "http://localhost:8000/api/cert/password"
 const urlL = "http://localhost:8000/login"
 const urlR = "http://localhost:8000/register"
 
@@ -75,6 +76,13 @@ async function button() {
         return
     }
 
+    var checkPassword = await asyncCheckCert(password)
+
+    if(content.message == 'failure') {
+        document.cookie = "message = passwordCheck; SameSite = None; Max-Age = 1000; Secure; path=/register;"
+        document.getElementById("error").innerHTML = "<b>Błąd:</b> Hasło znajduje sie na bazie danych popularnych haseł!"
+        return
+    }
 
     console.log(name)
     console.log(lname)
@@ -121,19 +129,24 @@ async function asyncRegister(name, lname, email, login, password, privilege) {
     return content
 }
 
-async function certcheck(input) {
+async function asyncCheckCert(password) {
 
-try {
-    const filecontent = fs.readFileSync(path.join(__dirname, 'wordlist_pl.txt'), 'utf-8');
-    const lines = filecontent.split('\n').map(line => line.trim());
-    if (lines.includes(input)) {
-        return true;
-    } 
-    else {
-        return false;
+    const headers = new Headers({
+        "Content-Type": "application/json"
+    })
+
+    const body = JSON.stringify({
+        password: password
+    })
+
+    const options = {
+        method: "POST",
+        headers: headers,
+        body: body
     }
-} 
-catch (err) {
-    console.error('Error reading wordlist:', err);
-}
+
+    const response = await fetch(urlPC, options)
+    const content = await response.json()
+    return content
+
 }

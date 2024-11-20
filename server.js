@@ -30,16 +30,16 @@ app.get("/", (request, response, next) => {
   });
   
 app.get("/login", (request, response, next) => {
-    response.sendFile(path.join(__dirname, "/public/logowanie.html"));
+    response.sendFile(path.join(__dirname, "/public/login.html"));
 });
 
 app.get("/register", (request, response, next) => {
-    response.sendFile(path.join(__dirname, "/public/rejestracja.html"));
+    response.sendFile(path.join(__dirname, "/public/register.html"));
 });
 
-app.get("/przypomnij", (request, response, next) => {
-    response.sendFile(path.join(__dirname, "/public/przypomnij.html"));
-});
+// app.get("/przypomnij", (request, response, next) => {
+//     response.sendFile(path.join(__dirname, "/public/przypomnij.html"));
+// });
 
 app.get("/dashboard", (request, response, next) => {
 
@@ -119,7 +119,7 @@ app.get("/api/accounts/logout", (request, response) => {
     })
 })
 
-app.get("api/accounts/certcheck", (request, response) => {
+app.get("api/cert/password", (request, response) => {
 
     const password = request.body.password
     sql = ("SELECT * FROM passwords WHERE password = '%password%';")

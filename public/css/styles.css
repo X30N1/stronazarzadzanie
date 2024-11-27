@@ -3,52 +3,22 @@ body {
     margin: 0;
     padding: 0;
     background-color: #f5f5f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Wyśrodkowanie sekcji */
   }
   
-  .dashboard, .registration {
+  .registration {
     width: 300px;
-    margin: 50px auto;
     background-color: #d3d3d3;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
   
-  header h1 {
-    font-size: 18px;
-    margin-bottom: 20px;
-  }
-  
-  main {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-  }
-  
-  .calendar {
-    background-color: #eee;
-    height: 150px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: 1px solid #000;
-  }
-  
-  .info p {
-    font-size: 14px;
-  }
-  
-  footer {
-    display: flex;
-    justify-content: space-between;
-  }
-  
-  .btn {
-    padding: 8px 12px;
-    background-color: white;
-    border: 1px solid #000;
-    border-radius: 4px;
-    cursor: pointer;
+  h1 {
+    text-align: center;
   }
   
   form {
@@ -63,17 +33,37 @@ body {
     font-size: 14px;
   }
   
-  form input {
+  form input, form span {
     padding: 5px;
     border: 1px solid #ccc;
     border-radius: 4px;
+    flex-grow: 1;
+    text-align: left;
   }
   
-  form button {
+  form span {
+    padding: 0; /* "TBA" nie potrzebuje wewnętrznego marginesu */
+    display: flex;
+    align-items: center;
+  }
+  
+  .btn-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+  }
+  
+  .btn {
     padding: 8px 12px;
+    width: 150px; /* Zmniejszenie szerokości przycisku */
     background-color: white;
     border: 1px solid #000;
     border-radius: 4px;
     cursor: pointer;
+    text-align: center;
+  }
+  
+  .btn:hover {
+    background-color: #e0e0e0;
   }
   

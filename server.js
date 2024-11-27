@@ -116,7 +116,7 @@ app.get("/dashboard", (request, response, next) => {
 app.get("/personel/dashboard", (request, response, next) => {
 
     const isLoggedIn = request.session.isLoggedIn;
-    const privilaege = request.session.privilege;
+    const privilege = request.session.privilege;
     
     if (isLoggedIn && privilege == 1) {
         response.sendFile(path.join(__dirname, "/public/dashboard.html"));

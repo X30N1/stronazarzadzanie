@@ -25,8 +25,9 @@ app.listen(serverPort, () => {
     console.log("Server running on port %PORT%".replace("%PORT%", serverPort));
 })
 
-async function createAdminAccount() {
+function createAdminAccount() {
     const sqlA = "SELECT * FROM accounts WHERE login = 'admin';"
+    const parameters = []
 
     db.all(sqlA, parameters, (error, sqlResponse) => {
         if (error) {
@@ -42,7 +43,7 @@ async function createAdminAccount() {
             const aemail = "admin@farmaceutanasz.pl"
             const aprivilege = 2
 
-            bcrypt.hash(password, saltRounds, function(error, hash) {
+            bcrypt.hash(apassword, saltRounds, function(error, hash) {
                 if (error) {
                     return response.json({"error":err})
                 }
@@ -115,12 +116,12 @@ app.get("/dashboard", (request, response, next) => {
 app.get("/personel/dashboard", (request, response, next) => {
 
     const isLoggedIn = request.session.isLoggedIn;
-    const privilage = request.session.privilage;
+    const privilaege = request.session.privilege;
     
-    if (isLoggedIn && privilage == 1) {
+    if (isLoggedIn && privilege == 1) {
         response.sendFile(path.join(__dirname, "/public/dashboard.html"));
     } 
-    else if (isLoggedIn && privilage == 2) {
+    else if (isLoggedIn && privilege == 2) {
         response.sendFile(path.join(__dirname, "/public/admin.html"));
     }
     else {

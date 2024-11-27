@@ -112,6 +112,10 @@ app.get("/dashboard", (request, response, next) => {
     }
 });
 
+app.get("/css/login", (request, response, next) => {
+    response.sendFile(path.join(__dirname, "/public/css/login.css"));
+});
+
 app.get("/personel/dashboard", (request, response, next) => {
 
     const isLoggedIn = request.session.isLoggedIn;

@@ -25,6 +25,58 @@ app.listen(serverPort, () => {
     console.log("Server running on port %PORT%".replace("%PORT%", serverPort));
 })
 
+async function createAdminAccount() {
+    const sqlA = "SELECT * FROM accounts WHERE login = 'admin';"
+
+    db.all(sqlA, parameters, (error, sqlResponse) => {
+        if (error) {
+            console.log(error.message)
+            return
+        }
+
+        if(sqlResponse.length == 0) {
+            const alogin = "admin"
+            const apassword = "admin"
+            const aname = "Administrator"
+            const alname = "Kont"
+            const aemail = "admin@farmaceutanasz.pl"
+            const aprivilege = 2
+
+            bcrypt.hash(password, saltRounds, function(error, hash) {
+                if (error) {
+                    return response.json({"error":err})
+                }
+
+                var sql = ""
+                var parameters = []
+
+                sql = "INSERT INTO accounts VALUES (null, '%login%', '%password%', '%name%', '%lname%', '%email%', %privilege%);"
+                .replace("%login%", alogin)
+                .replace("%password%", hash)
+                .replace("%name%", aname)
+                .replace("%lname%", alname)
+                .replace("%email%", aemail)
+                .replace("%privilege%", aprivilege)
+
+                db.all(sql, parameters, (error, sqlResponse) => {
+                    if (error) {
+                        console.log(error.message)
+                        return
+                    }
+                    console.log("Dodano konto administratora.")
+                    return
+                })
+
+            });
+
+            console.log("Konto administratora już istnieje.")
+            return
+        }
+    })
+}
+
+createAdminAccount()
+
 app.get("/", (request, response, next) => {
     response.sendFile(path.join(__dirname, "/public/patient-dashboard.html"));
 });

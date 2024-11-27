@@ -26,14 +26,22 @@ app.listen(serverPort, () => {
 })
 
 app.get("/", (request, response, next) => {
-    response.redirect('/login');
-  });
+    response.sendFile(path.join(__dirname, "/public/patient-dashboard.html"));
+});
   
 app.get("/login", (request, response, next) => {
-    response.sendFile(path.join(__dirname, "/public/login.html"));
+    response.sendFile(path.join(__dirname, "/public/patient-login.html"));
 });
 
 app.get("/register", (request, response, next) => {
+    response.sendFile(path.join(__dirname, "/public/patient-register.html"));
+});
+  
+app.get("/personel/login", (request, response, next) => {
+    response.sendFile(path.join(__dirname, "/public/login.html"));
+});
+
+app.get("/personel/register", (request, response, next) => {
     response.sendFile(path.join(__dirname, "/public/register.html"));
 });
 
@@ -43,12 +51,28 @@ app.get("/register", (request, response, next) => {
 
 app.get("/dashboard", (request, response, next) => {
 
-    const isLoggedIn = request.session.isLoggedIn;
+    const isLoggedIn = request.session.isPatientLoggedIn;
     
     if (isLoggedIn) {
-        response.sendFile(path.join(__dirname, "/public/dashboard.html"));
+        response.sendFile(path.join(__dirname, "/public/patient-dashboard.html"));
     } else {
         response.redirect('/login');
+    }
+});
+
+app.get("/personel/dashboard", (request, response, next) => {
+
+    const isLoggedIn = request.session.isLoggedIn;
+    const privilage = request.session.privilage;
+    
+    if (isLoggedIn && privilage == 1) {
+        response.sendFile(path.join(__dirname, "/public/dashboard.html"));
+    } 
+    else if (isLoggedIn && privilage == 2) {
+        response.sendFile(path.join(__dirname, "/public/admin.html"));
+    }
+    else {
+        response.redirect('/personel/login');
     }
 });
 

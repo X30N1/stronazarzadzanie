@@ -1,7 +1,7 @@
 const urlAL = "http://localhost:8000/api/accounts/login"
-const urlD = "http://localhost:8000/dashboard"
-const urlL = "http://localhost:8000/login"
-const urlR = "http://localhost:8000/register"
+const urlD = "http://localhost:8000/personel/dashboard"
+const urlL = "http://localhost:8000/personel/login"
+const urlR = "http://localhost:8000/personel/register"
 
 async function button() {
     const login = document.getElementById("inputLogin").value

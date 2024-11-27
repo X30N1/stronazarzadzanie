@@ -1,7 +1,7 @@
 const url = "http://localhost:8000/api/accounts/register"
 const urlPC = "http://localhost:8000/api/cert/password"
-const urlL = "http://localhost:8000/login"
-const urlR = "http://localhost:8000/register"
+const urlL = "http://localhost:8000/personel/login"
+const urlR = "http://localhost:8000/personel/register"
 
 window.onload = function() {
     var cookie = getCookie("message")
@@ -78,18 +78,11 @@ async function button() {
 
     var checkPassword = await asyncCheckCert(password)
 
-    if(content.message == 'failure') {
+    if(checkPassword.message == 'failure') {
         document.cookie = "message = passwordCheck; SameSite = None; Max-Age = 1000; Secure; path=/register;"
         document.getElementById("error").innerHTML = "<b>Błąd:</b> Hasło znajduje sie na bazie danych popularnych haseł!"
         return
     }
-
-    console.log(name)
-    console.log(lname)
-    console.log(email)
-    console.log(login)
-    console.log(password)
-    console.log(privilege)
 
     var content = await asyncRegister(name, lname, email, login, password, privilege)
     

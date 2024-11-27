@@ -10,7 +10,7 @@ Wiec no :P
 >[!CAUTION]
 >- Trzeba dodać pola pacjentów do bazy danych / rejestracji itp. Wtedy trzeba też przełożyć rejesrację pacjentów na oddzielne okno na rejestrację pacjentów. [backend done]
 >- Pacjent może się zarejestrować [Backend Done]
->- Konto admin [Kwestia zrobienia konta]
+>- Konto admin [Done ? (admin page został)]
 >- Baza danych i okno do zarządzania pacjentami (relacja bazy spotkań do bazy wizyt) - weś ktoś wytłumacz xd, bo zdaje mi sie ze backendowo done
 >- Zarządzanie kontami dla admina [Backend Done]
 >- Pacjent może zarejestrować sam wizytę u lekarza [Backend Done]

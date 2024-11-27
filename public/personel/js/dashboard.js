@@ -4,9 +4,9 @@ const urlGA = "http://localhost:8000/api/appointments/select"
 const urlUA = "http://localhost:8000/api/appointments/update"
 const urlRA = "http://localhost:8000/api/appointments/remove"
 const urlPA = "http://localhost:8000/api/patients/add"
-const urlD = "http://localhost:8000/dashboard"
+const urlD = "http://localhost:8000/personel/dashboard"
 const urlLO = "http://localhost:8000/api/accounts/logout"
-const urlLI = "http://localhost:8000/login"
+const urlLI = "http://localhost:8000/personel/login"
 
 var currentPage = 1
 var maxPages = 1

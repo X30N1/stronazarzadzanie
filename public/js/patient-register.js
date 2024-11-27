@@ -1,4 +1,4 @@
-const url = "http://localhost:8000/api/accounts/register"
+const url = "http://localhost:8000/api/patients/register"
 const urlPC = "http://localhost:8000/api/cert/password"
 const urlL = "http://localhost:8000/login"
 const urlR = "http://localhost:8000/register"
@@ -77,20 +77,12 @@ async function button() {
     }
 
     var checkPassword = await asyncCheckCert(password)
-    console.log(checkPassword)
 
     if(checkPassword.message == 'failure') {
         document.cookie = "message = passwordCheck; SameSite = None; Max-Age = 1000; Secure; path=/register;"
-        document.getElementById("error").innerHTML = "<b>Błąd:</b> Hasło znajduje sie w bazie danych popularnych haseł!"
+        document.getElementById("error").innerHTML = "<b>Błąd:</b> Hasło znajduje sie na bazie danych popularnych haseł!"
         return
     }
-
-    console.log(name)
-    console.log(lname)
-    console.log(email)
-    console.log(login)
-    console.log(password)
-    console.log(privilege)
 
     var content = await asyncRegister(name, lname, email, login, password, privilege)
     
@@ -104,7 +96,7 @@ async function button() {
     }
 }
 
-async function asyncRegister(name, lname, email, login, password, privilege) {
+async function asyncRegister(name, lname, email, login, password) {
 
     const headers = new Headers({
         "Content-Type": "application/json"
@@ -115,8 +107,7 @@ async function asyncRegister(name, lname, email, login, password, privilege) {
         lname: lname,
         email: email,
         login: login,
-        password: password,
-        privilege: privilege
+        password: password
     })
 
     const options = {

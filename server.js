@@ -25,15 +25,76 @@ app.listen(serverPort, () => {
     console.log("Server running on port %PORT%".replace("%PORT%", serverPort));
 })
 
+function createAdminAccount() {
+    const sqlA = "SELECT * FROM accounts WHERE login = 'admin';"
+    const parameters = []
+
+    db.all(sqlA, parameters, (error, sqlResponse) => {
+        if (error) {
+            console.log(error.message)
+            return
+        }
+
+        if(sqlResponse.length == 0) {
+            const alogin = "admin"
+            const apassword = "admin"
+            const aname = "Administrator"
+            const alname = "Kont"
+            const aemail = "admin@farmaceutanasz.pl"
+            const aprivilege = 2
+
+            bcrypt.hash(apassword, saltRounds, function(error, hash) {
+                if (error) {
+                    return response.json({"error":err})
+                }
+
+                var sql = ""
+                var parameters = []
+
+                sql = "INSERT INTO accounts VALUES (null, '%login%', '%password%', '%name%', '%lname%', '%email%', %privilege%);"
+                .replace("%login%", alogin)
+                .replace("%password%", hash)
+                .replace("%name%", aname)
+                .replace("%lname%", alname)
+                .replace("%email%", aemail)
+                .replace("%privilege%", aprivilege)
+
+                db.all(sql, parameters, (error, sqlResponse) => {
+                    if (error) {
+                        console.log(error.message)
+                        return
+                    }
+                    console.log("Dodano konto administratora.")
+                    return
+                })
+
+            });
+
+            console.log("Konto administratora już istnieje.")
+            return
+        }
+    })
+}
+
+createAdminAccount()
+
 app.get("/", (request, response, next) => {
-    response.redirect('/login');
-  });
+    response.sendFile(path.join(__dirname, "/public/patient-dashboard.html"));
+});
   
 app.get("/login", (request, response, next) => {
-    response.sendFile(path.join(__dirname, "/public/login.html"));
+    response.sendFile(path.join(__dirname, "/public/patient-login.html"));
 });
 
 app.get("/register", (request, response, next) => {
+    response.sendFile(path.join(__dirname, "/public/patient-register.html"));
+});
+  
+app.get("/personel/login", (request, response, next) => {
+    response.sendFile(path.join(__dirname, "/public/login.html"));
+});
+
+app.get("/personel/register", (request, response, next) => {
     response.sendFile(path.join(__dirname, "/public/register.html"));
 });
 
@@ -43,12 +104,28 @@ app.get("/register", (request, response, next) => {
 
 app.get("/dashboard", (request, response, next) => {
 
-    const isLoggedIn = request.session.isLoggedIn;
+    const isLoggedIn = request.session.isPatientLoggedIn;
     
     if (isLoggedIn) {
-        response.sendFile(path.join(__dirname, "/public/dashboard.html"));
+        response.sendFile(path.join(__dirname, "/public/patient-dashboard.html"));
     } else {
         response.redirect('/login');
+    }
+});
+
+app.get("/personel/dashboard", (request, response, next) => {
+
+    const isLoggedIn = request.session.isLoggedIn;
+    const privilege = request.session.privilege;
+    
+    if (isLoggedIn && privilege == 1) {
+        response.sendFile(path.join(__dirname, "/public/dashboard.html"));
+    } 
+    else if (isLoggedIn && privilege == 2) {
+        response.sendFile(path.join(__dirname, "/public/admin.html"));
+    }
+    else {
+        response.redirect('/personel/login');
     }
 });
 
@@ -209,7 +286,7 @@ app.post("/api/accounts/update", (request, response, next) => {
         }
         return response.json({"message":"success"})
     })
-    });
+});
 
 app.post("/api/patients/register", (request, response, next) => {
 
@@ -219,6 +296,7 @@ app.post("/api/patients/register", (request, response, next) => {
     const lname = request.body.lname
     const email = request.body.email
     const contact = request.body.contact
+    const address = request.body.address
 
     bcrypt.hash(password, saltRounds, function(error, hash) {
         if (error) {
@@ -228,13 +306,14 @@ app.post("/api/patients/register", (request, response, next) => {
         var sql = ""
         var parameters = []
 
-        sql = "INSERT INTO patients VALUES (null, '%login%', '%password%', '%name%', '%lname%', '%email%', '%contact%');"
+        sql = "INSERT INTO patients VALUES (null, '%login%', '%password%', '%name%', '%lname%', '%email%', '%contact%', '%address%');"
         .replace("%login%", login)
         .replace("%password%", hash)
         .replace("%name%", name)
         .replace("%lname%", lname)
         .replace("%email%", email)
         .replace("%contact%", contact)
+        .replace('%address%', address)
 
         db.all(sql, parameters, (error, sqlResponse) => {
             if (error) {
@@ -243,7 +322,6 @@ app.post("/api/patients/register", (request, response, next) => {
             }
             return response.json({"message":"success"})
         })
-
     });
 })
 
@@ -283,8 +361,7 @@ app.post("/api/patients/login", (request, response, next) => {
             request.session.login = login
             request.session.name = name
             request.session.lname = lname
-            request.session.privilege = privilege
-    
+
             response.json({
                 "message":"success",
                 login: login,
@@ -326,6 +403,7 @@ app.post("/api/patients/add", (request, response, next) => { // Masakra, pewnie 
     const patientName = request.body.name
     const patientLName = request.body.lname
     const patientContact = request.body.contact
+    const patientAddress = request.body.address
 
     if(privilege < 1) {
         return response.status(400).json({"error":"insufficient permissions"})
@@ -335,12 +413,13 @@ app.post("/api/patients/add", (request, response, next) => { // Masakra, pewnie 
     var sql2 = ""
     var parameters = []
 
-    sql = "SELECT patientID FROM patients WHERE patientName = '%patientName%' AND patientLName = '%patientLName%' AND patientContact = '%patientContact%';"
+    sql = "SELECT patientID FROM patients WHERE patientName = '%patientName%' AND patientLName = '%patientLName%' AND patientContact = '%patientContact%' AND patientAddress = '%patientAddress%';"
     .replace("%patientName%", patientName)
     .replace("%patientLName%", patientLName)
     .replace("%patientContact%", patientContact)
+    .replace("%patientAddress", patientAddress)
 
-    sql2 = "INSERT INTO patients VALUES (null, '%patientName%', '%patientLName%', '%patientContact%');"
+    sql2 = "INSERT INTO patients VALUES (null, '', '', '%patientName%', '%patientLName%', '%patientContact%', %patientAddress%);"
     .replace("%patientName%", patientName)
     .replace("%patientLName%", patientLName)
     .replace("%patientContact%", patientContact)
@@ -392,6 +471,8 @@ app.post("/api/patients/update", (request, response, next) => {
     const patientName = request.body.patientName
     const patientLName = request.body.patientLName
     const patientContact = request.body.patientContact
+    const patientAddress = request.body.patientAddress
+    const patientEmail = request.body.email
 
     if(privilege < 1) {
         return response.status(400).json({"error":"insufficient permissions"})
@@ -400,11 +481,13 @@ app.post("/api/patients/update", (request, response, next) => {
     var sql = ""
     var parameters = []
 
-    sql = "UPDATE patients SET patientName = '%patientName%', patientLName = '%patientLName%', patientContact = '%patientContact%' WHERE patientID = %patientID%;"
+    sql = "UPDATE patients SET patientName = '%patientName%', patientLName = '%patientLName%', patientContact = '%patientContact%', patientAddress = '%patientAdress%', patientEmail = '%patientEmail%' WHERE patientID = %patientID%;"
     .replace("%patientName", patientName)
     .replace("%patientLName%", patientLName)
     .replace("%patientContact%", patientContact)
     .replace("%patientID%", patientID)
+    .replace("%patientAddress", patientAddress)
+    .replace("%patientEmail%", patientEmail)
 
     db.all(sql, parameters, (error, sqlResponse) => {
         if (error) {

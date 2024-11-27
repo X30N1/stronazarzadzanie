@@ -1,7 +1,7 @@
-const url = "http://localhost:8000/api/accounts/login"
-const urlD = "http://localhost:8000/dashboard"
-const urlL = "http://localhost:8000/login"
-const urlR = "http://localhost:8000/register"
+const urlAL = "http://localhost:8000/api/accounts/login"
+const urlD = "http://localhost:8000/personel/dashboard"
+const urlL = "http://localhost:8000/personel/login"
+const urlR = "http://localhost:8000/personel/register"
 
 async function button() {
     const login = document.getElementById("inputLogin").value
@@ -46,7 +46,7 @@ async function asyncLogin(login, password) {
         body: body
     }
 
-    const response = await fetch(url, options)
+    const response = await fetch(urlAL, options)
     const content = await response.json()
 
     return content

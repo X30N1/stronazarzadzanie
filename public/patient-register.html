@@ -1,12 +1,36 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rejestracja</title>
+    <link rel="stylesheet" href="css/patient-register.css">
     <script src="js/patient-register.js"></script>
+    <title>Rejestracja Pacjenta</title>
 </head>
 <body>
-    DO UZUPEŁNIENIA
+    <div id="okno">
+        <div id="back"><input type="button" value="Cofnij" onclick="toLogin()"></div>
+        <h1>Rejestracja nowego pacjenta</h1>
+        <h2 id="infoMsg"></h2>
+        <form>
+            <input type="text" id="inputName" placeholder="Imię" class="input-field">
+            <input type="text" id="inputLName" placeholder="Nazwisko" class="input-field">
+            <input type="text" id="inputEmail" placeholder="Adress email" class="input-field">
+            <input type="text" id="inputContact" placeholder="Kontakt" class="input-field">
+            <input type="text" id="inputAddress" placeholder="Adres" class="input-field">
+            <input type="text" id="inputLogin" placeholder="Nazwa użytkownika" class="input-field">
+            <input type="password" id="inputPassword" placeholder="Hasło" class="input-field">
+            <input type="password" id="inputPasswordC" placeholder="Potwierdź Hasło" class="input-field">
+            <hr>
+            <ul>
+                <b>Twoje hasło musi zawierać:</b>
+                <li>Co najmniej 12 znaków</li>
+                <li>Co najmniej jedną cyfrę</li>
+                <li>Hasło nie może być zawarte w liście najczęściej używanych haseł</li>
+            </ul>
+            <input type="button" onclick="button()" value="Zarejestruj" class="register-button">
+        </form>
+        <div id="error"></div>
+    </div>
 </body>
 </html>

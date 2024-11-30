@@ -417,12 +417,13 @@ app.post("/api/patients/add", (request, response, next) => { // Masakra, pewnie 
     .replace("%patientName%", patientName)
     .replace("%patientLName%", patientLName)
     .replace("%patientContact%", patientContact)
-    .replace("%patientAddress", patientAddress)
+    .replace("%patientAddress%", patientAddress)
 
-    sql2 = "INSERT INTO patients VALUES (null, '', '', '%patientName%', '%patientLName%', '%patientContact%', %patientAddress%);"
+    sql2 = "INSERT INTO patients VALUES (null, null, null, '%patientName%', '%patientLName%', null, '%patientContact%', '%patientAddress%');"
     .replace("%patientName%", patientName)
     .replace("%patientLName%", patientLName)
     .replace("%patientContact%", patientContact)
+    .replace("%patientAddress%", patientAddress)
 
     db.all(sql, parameters, (error, sqlResponse) => {
 
@@ -442,14 +443,14 @@ app.post("/api/patients/add", (request, response, next) => { // Masakra, pewnie 
         db.all(sql2, parameters, (error2, sqlResponse2) => {
 
             if (error2) {
-                response.status(400).json({"error":error.message})
+                response.status(400).json({"error":error2.message})
                 return
             }
 
             db.all(sql, parameters, (error3, sqlResponse3) => {
 
                 if (error3) {
-                    response.status(400).json({"error":error.message})
+                    response.status(400).json({"error":error3.message})
                     return
                 }
                 
@@ -513,7 +514,7 @@ app.post("/api/appointments/select", (request, response, next) => {
     var sql = ""
     var parameters = []
 
-    sql = "SELECT a.appointmentid, a.appointmentDate, a.appointmentTime, a.appointmentStatus, p.patientName, p.patientLName, p.patientContact FROM appointments AS a INNER JOIN patients AS p ON a.patientID = p.patientID ORDER BY a.appointmentDate DESC, a.appointmentTime DESC LIMIT %limit% OFFSET %offset%;"
+    sql = "SELECT a.appointmentid, a.appointmentDate, a.appointmentTime, a.appointmentStatus, p.patientName, p.patientLName, p.patientContact, p.patientAddress FROM appointments AS a INNER JOIN patients AS p ON a.patientID = p.patientID ORDER BY a.appointmentDate DESC, a.appointmentTime DESC LIMIT %limit% OFFSET %offset%;"
     .replace("%limit%", limit) 
     .replace("%offset%", offset)
 

@@ -67,8 +67,9 @@ async function displayAppointments(content) {
         tdSelector.appendChild(selector)
         tr.appendChild(tdSelector)
 
-        for(j = 0; j < 6; j++) {
+        for(j = 0; j < 7; j++) {
             var element = document.createElement("td")
+            console.log(content[i])
             switch(j) {
                 case 0:
                     var text = document.createTextNode(content[i].patientName)
@@ -86,6 +87,9 @@ async function displayAppointments(content) {
                     var text = document.createTextNode(content[i].patientContact)
                     break
                 case 5:
+                    var text = document.createTextNode(content[i].patientAddress)
+                    break
+                case 6:
                     var text = document.createTextNode(content[i].appointmentStatus)
                     break
             }
@@ -105,11 +109,12 @@ async function buttonAddAppointment() {
     const name = document.getElementById("inputName").value
     const lname = document.getElementById("inputLName").value
     const contact = document.getElementById("inputContact").value
+    const address = document.getElementById("inputAddress").value
     const date = document.getElementById("inputDate").value
     const time = document.getElementById("inputTime").value
     const privilege = sessionStorage.getItem("privilege")
 
-    const content = await asyncAddPatient(name, lname, contact, privilege)
+    const content = await asyncAddPatient(name, lname, contact, address, privilege)
     console.log(content)
 
     const id = content.success[0].patientID
@@ -120,8 +125,9 @@ async function buttonAddAppointment() {
     }
     
     const content2 = await asyncAddAppointment(id, date, time, privilege)
+    console.log(content2)
 
-    if(content.message == "success") {
+    if(content2.success) {
         getListOfAppointments()
     }
 }
@@ -160,6 +166,7 @@ async function showEdit() {
     document.getElementById("inputName").value = selectedData.patientName;
     document.getElementById("inputLName").value = selectedData.patientLName;
     document.getElementById("inputContact").value = selectedData.patientContact;
+    document.getElementById("inputAddress").value = selectedData.patientAddress;
     document.getElementById("inputDate").value = selectedData.appointmentDate;
     document.getElementById("inputTime").value = selectedData.appointmentTime;
     document.getElementById("inputStatus").value = selectedData.appointmentStatus;
@@ -182,6 +189,7 @@ async function showAdd() {
     document.getElementById("inputName").value = '';
     document.getElementById("inputLName").value = '';
     document.getElementById("inputContact").value = '';
+    document.getElementById("inputAddress").value = '';
     document.getElementById("inputDate").value = '';
     document.getElementById("inputTime").value = '';
 
@@ -193,12 +201,13 @@ async function buttonEditAppointment() {
     const name = document.getElementById("inputName").value
     const lname = document.getElementById("inputLName").value
     const contact = document.getElementById("inputContact").value
+    const address = document.getElementById("inputAddress").value
     const date = document.getElementById("inputDate").value
     const time = document.getElementById("inputTime").value
     const status = document.getElementById("inputStatus").value
     const privilege = sessionStorage.getItem("privilege")
 
-    const content = await asyncAddPatient(name, lname, contact, privilege)
+    const content = await asyncAddPatient(name, lname, contact, address, privilege)
     console.log(content)
 
     const id = content.success[0].patientID
@@ -208,7 +217,7 @@ async function buttonEditAppointment() {
         getListOfAppointments()
     }
     
-    const content2 = await asyncEditAppointment(appointmentId, id, date, time, status, privilege)
+    const content2 = await asyncEditAppointment(appointmentId, id, date, time, status, address, privilege)
 
     if(content2.message == "success") {
         getListOfAppointments()
@@ -319,7 +328,7 @@ async function asyncAddAppointment(patientID, date, time, privilege) {
 
 
 
-async function asyncEditAppointment(appointmentID, patientID, date, time, status, privilege) {
+async function asyncEditAppointment(appointmentID, patientID, date, time, address, status, privilege) {
 
     const headers = new Headers({
         "Content-Type": "application/json"
@@ -331,6 +340,7 @@ async function asyncEditAppointment(appointmentID, patientID, date, time, status
         date: date,
         time: time,
         status: status,
+        address: address,
         privilege: privilege
     })
 
@@ -345,7 +355,7 @@ async function asyncEditAppointment(appointmentID, patientID, date, time, status
     return content
 }
 
-async function asyncAddPatient(name, lname, contact, privilege) {
+async function asyncAddPatient(name, lname, contact, address, privilege) {
 
     const headers = new Headers({
         "Content-Type": "application/json"
@@ -355,6 +365,7 @@ async function asyncAddPatient(name, lname, contact, privilege) {
         name: name,
         lname: lname,
         contact: contact,
+        address: address,
         privilege: privilege
     })
 

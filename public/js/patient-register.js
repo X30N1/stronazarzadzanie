@@ -51,11 +51,13 @@ async function button() {
     const lname = document.getElementById("inputLName").value
     const email = document.getElementById("inputEmail").value
     const login = document.getElementById("inputLogin").value
+    const address = document.getElementById("inputContact").value
+    const contact = document.getElementById("inputAddress").value
     const password = document.getElementById("inputPassword").value
     const passwordC = document.getElementById("inputPasswordC").value
     const privilege = 1
 
-    if(name == "" || lname == "" || email == "" || login == "" || password == "" || password == "") {
+    if(name == "" || lname == "" || email == "" || contact == "" || address == "" || login == "" || password == "" || password == "") {
         document.cookie = "message = missingInput; SameSite = None; Max-Age = 1000; Secure; path=/register;"
         document.getElementById("error").innerHTML = "<b>Błąd:</b> Wszystkie pola muszą być uzupełnione."
         return
@@ -77,14 +79,15 @@ async function button() {
     }
 
     var checkPassword = await asyncCheckCert(password)
+    console.log(checkPassword)
 
     if(checkPassword.message == 'failure') {
         document.cookie = "message = passwordCheck; SameSite = None; Max-Age = 1000; Secure; path=/register;"
-        document.getElementById("error").innerHTML = "<b>Błąd:</b> Hasło znajduje sie na bazie danych popularnych haseł!"
+        document.getElementById("error").innerHTML = "<b>Błąd:</b> Hasło znajduje sie w bazie danych popularnych haseł!"
         return
     }
 
-    var content = await asyncRegister(name, lname, email, login, password, privilege)
+    var content = await asyncRegister(name, lname, email, contact, address, login, password, privilege)
     
     if(content.message == "success") {
         document.cookie = "message = success; SameSite = None; Max-Age = 1000; Secure; path=/login;"
@@ -96,7 +99,7 @@ async function button() {
     }
 }
 
-async function asyncRegister(name, lname, email, login, password) {
+async function asyncRegister(name, lname, email, contact, address, login, password, privilege) {
 
     const headers = new Headers({
         "Content-Type": "application/json"
@@ -106,8 +109,11 @@ async function asyncRegister(name, lname, email, login, password) {
         name: name,
         lname: lname,
         email: email,
+        contact: contact,
+        address: address,
         login: login,
-        password: password
+        password: password,
+        privilege: privilege
     })
 
     const options = {

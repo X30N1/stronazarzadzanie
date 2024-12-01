@@ -167,7 +167,7 @@ app.post("/api/accounts/login", (request, response, next) => {
     var sql = ""
     var parameters = []
 
-    sql = "SELECT password, name, lname, privilege FROM accounts WHERE login = '%login%';"
+    sql = "SELECT accountID, password, name, lname, privilege FROM accounts WHERE login = '%login%';"
     .replace("%login%", login) 
 
     db.all(sql, parameters, (error, sqlResponse) => {
@@ -185,6 +185,7 @@ app.post("/api/accounts/login", (request, response, next) => {
         var hash = sqlResponse[0].password
         var name = sqlResponse[0].name
         var lname = sqlResponse[0].lname
+        var id = sqlResponse[0].accountID
         var privilege = sqlResponse[0].privilege
 
         bcrypt.compare(password, hash, function(err, result) {
@@ -193,6 +194,7 @@ app.post("/api/accounts/login", (request, response, next) => {
                 return
             }
             request.session.isLoggedIn = true
+            request.session.id = id
             request.session.login = login
             request.session.name = name
             request.session.lname = lname
@@ -200,6 +202,7 @@ app.post("/api/accounts/login", (request, response, next) => {
     
             response.json({
                 "message":"success",
+                id: id,
                 login: login,
                 name: name,
                 lname: lname,
@@ -333,7 +336,7 @@ app.post("/api/patients/login", (request, response, next) => {
     var sql = ""
     var parameters = []
 
-    sql = "SELECT patientPassword, patientName, patientLName FROM patients WHERE patientLogin = '%login%';"
+    sql = "SELECT patientID, patientPassword, patientName, patientLName FROM patients WHERE patientLogin = '%login%';"
     .replace("%login%", login) 
 
     db.all(sql, parameters, (error, sqlResponse) => {
@@ -348,9 +351,10 @@ app.post("/api/patients/login", (request, response, next) => {
             return
         }
 
-        var hash = sqlResponse[0].password
-        var name = sqlResponse[0].name
-        var lname = sqlResponse[0].lname
+        var hash = sqlResponse[0].patientPassword
+        var name = sqlResponse[0].patientName
+        var lname = sqlResponse[0].patientLName
+        var id = sqlResponse[0].patientID
 
         bcrypt.compare(password, hash, function(err, result) {
             if(!result || err) {
@@ -358,12 +362,14 @@ app.post("/api/patients/login", (request, response, next) => {
                 return
             }
             request.session.isPatientLoggedIn = true
+            request.session.id = id
             request.session.login = login
             request.session.name = name
             request.session.lname = lname
 
             response.json({
                 "message":"success",
+                id: id,
                 login: login,
                 name: name,
                 lname: lname
@@ -510,13 +516,15 @@ app.post("/api/appointments/select", (request, response, next) => {
 
     const limit = request.body.limit
     const offset = request.body.offset * limit
+    const id = request.body.id
 
     var sql = ""
     var parameters = []
 
-    sql = "SELECT a.appointmentid, a.appointmentDate, a.appointmentTime, a.appointmentStatus, p.patientName, p.patientLName, p.patientContact, p.patientAddress FROM appointments AS a INNER JOIN patients AS p ON a.patientID = p.patientID ORDER BY a.appointmentDate DESC, a.appointmentTime DESC LIMIT %limit% OFFSET %offset%;"
+    sql = "SELECT a.appointmentid, a.appointmentDate, a.appointmentTime, a.appointmentStatus, p.patientName, p.patientLName, p.patientContact, p.patientAddress FROM appointments AS a INNER JOIN patients AS p ON a.patientID = p.patientID WHERE a.accountID = %id% ORDER BY a.appointmentDate DESC, a.appointmentTime DESC LIMIT %limit% OFFSET %offset%;"
     .replace("%limit%", limit) 
     .replace("%offset%", offset)
+    .replace("%id%", id)
 
     db.all(sql, parameters, (error, sqlResponse) => {
         if (error) {
@@ -553,6 +561,7 @@ app.post("/api/appointments/count", (request, response, next) => {
 app.post("/api/appointments/add", (request, response, next) => {
 
     const privilege = request.body.privilege
+    const accountID = request.body.accountID
     const patientID = request.body.patientID
     const appointmentDate = request.body.date
     const appointmentTime = request.body.time
@@ -565,7 +574,8 @@ app.post("/api/appointments/add", (request, response, next) => {
     var sql = ""
     var parameters = []
 
-    sql = "INSERT INTO appointments VALUES (null, %patientID%, '%appointmentDate%', '%appointmentTime%', '%appointmentStatus%');"
+    sql = "INSERT INTO appointments VALUES (null, %accountID%, %patientID%, '%appointmentDate%', '%appointmentTime%', '%appointmentStatus%');"
+    .replace("%accountID%", accountID)
     .replace("%patientID%", patientID)
     .replace("%appointmentDate%", appointmentDate)
     .replace("%appointmentTime%", appointmentTime)

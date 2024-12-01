@@ -43,7 +43,7 @@ async function getListOfAppointments() {
     maxPages = 1 + Math.floor(count / maxPerPage) 
     document.getElementById("count").innerHTML = "Strona " + currentPage + "/" + maxPages + " (ilość pól: " + count + ")"
 
-    var content = await asyncGetAppointments(maxPerPage, (currentPage - 1), sessionStorage.getItem("privilege"))
+    var content = await asyncGetAppointments(maxPerPage, (currentPage - 1), sessionStorage.getItem("id"), sessionStorage.getItem("privilege"))
     data = content.success
 
     displayAppointments(data)
@@ -124,7 +124,7 @@ async function buttonAddAppointment() {
         getListOfAppointments()
     }
     
-    const content2 = await asyncAddAppointment(id, date, time, privilege)
+    const content2 = await asyncAddAppointment(id, sessionStorage.getItem("id"), date, time, privilege)
     console.log(content2)
 
     if(content2.success) {
@@ -257,7 +257,7 @@ async function asyncCount(privilege) {
     return content
 }
 
-async function asyncGetAppointments(limit, offset, privilege) {
+async function asyncGetAppointments(limit, offset, id, privilege) {
 
     const headers = new Headers({
         "Content-Type": "application/json"
@@ -266,7 +266,8 @@ async function asyncGetAppointments(limit, offset, privilege) {
     const body = JSON.stringify({
         privilege: privilege,
         limit: limit,
-        offset: offset
+        offset: offset,
+        id: id
     })
 
     const options = {
@@ -302,7 +303,7 @@ async function asyncRemoveAppointment(id, privilege) { // todo
     return content
 }
 
-async function asyncAddAppointment(patientID, date, time, privilege) {
+async function asyncAddAppointment(patientID, accountID, date, time, privilege) {
 
     const headers = new Headers({
         "Content-Type": "application/json"
@@ -310,6 +311,7 @@ async function asyncAddAppointment(patientID, date, time, privilege) {
 
     const body = JSON.stringify({
         patientID: patientID,
+        accountID: accountID,
         date: date,
         time: time,
         privilege: privilege

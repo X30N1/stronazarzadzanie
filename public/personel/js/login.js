@@ -14,6 +14,7 @@ async function button() {
     console.log(content)
 
     if(content.message == "success") {
+        sessionStorage.setItem("id", content.id)
         sessionStorage.setItem("login", login)
         sessionStorage.setItem("name", content.name)
         sessionStorage.setItem("lname", content.lname)

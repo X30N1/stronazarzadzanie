@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel pacjenta</title>
-    <link rel="stylesheet" href="css/dashboard.css">
+    <title>Panel użytkownika</title>
+    <link rel="stylesheet" href="css/patient-dashboard.css">
 
-    <script src="js/dashboard.js"></script>
+    <script src="js/patient-dashboard.js"></script>
 
 </head>
 <body>
@@ -19,87 +19,40 @@
     </header>
 
     <main id="main-content">
-        <div class="table-container">
-            <div class="table-header">
-                <input type="button" onclick="prevPage()" value="Poprzednia Strona">
-                <input type="button" onclick="nextPage()" value="Następna Strona">
-            </div>
-            <div class="table-content">
-                <table id="table">
-                    <thead>
-                        <td>
-                            
-                        </td>
-                        <td>
-                            Imię
-                        </td>
-                        <td>
-                            Nazwisko
-                        </td>
-                        <td>
-                            Data
-                        </td>
-                        <td>
-                            Godzina
-                        </td>
-                        <td>
-                            Kontakt
-                        </td>
-                        <td>
-                            Adres
-                        </td>
-                        <td>
-                            Status / Notatki
-                        </td>
-                    </thead>
-                </table>
-            </div>
-            <div class="table-footer">
-                <span id="count">Strona 1/1 (ilość pól: 0)</span>
-                <span>Wyświetl: <select id="display-count" onchange="getListOfAppointments()"> <!-- IMPLEMENTACJA DO ZROBIENIA -->
-                    <option value="10">10</option>
-                    <option value="25">25</option>
-                    <option value="50" selected>50</option>
-                </select></span>
-            </div>
+        <div id="selectDate"><label for="checkDate">Wybierz datę:</label>
+            <input type="date" name="checkDate" id="check-date">
+            <select id="display-time" onchange="getListOfAppointments()">
+                <option value="08:00">08:00</option> <!-- pon-pt -->
+                <option value="08:30">08:30</option>
+                <option value="09:00">09:00</option>
+                <option value="09:30">09:30</option>
+                <option value="10:00">10:00</option>
+                <option value="10:30">10:30</option>
+                <option value="11:00">11:00</option>
+                <option value="11:30">11:30</option>
+                <option value="12:00">12:00</option> <!-- sob -->
+                <option value="12:30">12:30</option>
+                <option value="13:00">13:00</option>
+                <option value="13:30">13:30</option>
+                <option value="14:00">14:00</option>
+                <option value="14:30">14:30</option>
+                <option value="15:00">15:00</option>
+                <option value="15:30">15:30</option>
+            </select>
         </div>
-
         <div class="buttons-container">
             <button class="delete-button" onclick="buttonRemoveAppointment()">Usuń wizytę</button>
             <button class="edit-button" id="edit-visit-btn" onclick="showEdit()">Edytuj wizytę</button>
             <button class="add-button" id="add-visit-btn" onclick="showAdd()">Dodaj wizytę</button>
         </div>
+
     </main>
 
     <!-- dodaj wizytę -->
     <div class="popup-overlay" id="popup-overlay">
         <div class="popup">
             <button class="close-popup" id="close-popup-btn" onclick="closePopup()">X</button>
-            <form>
-                <label for="name">Imię</label>
-                <input type="text" id="inputName" name="fname">
-                
-                <label for="lname">Nazwisko</label>
-                <input type="text" id="inputLName" name="lname">
-                
-                <label for="contact">Kontakt</label>
-                <input type="text" id="inputContact" name="contact">
-
-                <label for="address">Adres</label>
-                <input type="text" id="inputAddress" name="address">
-                
-                <label for="date">Data</label>
-                <input type="date" id="inputDate" name="date">
-                
-                <label for="time">Godzina</label>
-                <input type="time" id="inputTime" name="time">
-
-                <label for="status" class="display-edit">Status</label>
-                <input type="text" class="display-edit" id="inputStatus" name="status">
-                
-                <input type="button" id="func-save-button" class="save-button" onclick="buttonAddAppointment()" value="Dodaj"></input>
-                <input type="button" id="func-edit-button" class="edit-button" onclick="buttonEditAppointment()" value="Edytuj"></input>
-            </form>
+            <span>Pomyślnie wykonano zadanie!</span>
         </div>
     </div>
 </body>

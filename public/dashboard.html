@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel użytkownika</title>
+    <title>Panel personelu</title>
     <link rel="stylesheet" href="css/dashboard.css">
 
     <script src="js/dashboard.js"></script>
@@ -28,32 +28,38 @@
                 <table id="table">
                     <thead>
                         <td>
-                            Poniedzialek
+                            
                         </td>
                         <td>
-                            Wtorek
+                            Imię
                         </td>
                         <td>
-                            Sroda
+                            Nazwisko
                         </td>
                         <td>
-                            Czwartek
+                            Data
                         </td>
                         <td>
-                            Piątek
+                            Godzina
                         </td>
                         <td>
-                            Sobota
+                            Kontakt
                         </td>
                         <td>
-                            Niedziela
+                            Adres
+                        </td>
+                        <td>
+                            Status / Notatki
                         </td>
                     </thead>
                 </table>
             </div>
             <div class="table-footer">
-                <span id="count">YYYY - MM</span>
-                <span>Wyświetl datę
+                <span id="count">Strona 1/1 (ilość pól: 0)</span>
+                <span>Wyświetl: <select id="display-count" onchange="getListOfAppointments()">
+                    <option value="10">10</option>
+                    <option value="25">25</option>
+                    <option value="50" selected>50</option>
                 </select></span>
             </div>
         </div>

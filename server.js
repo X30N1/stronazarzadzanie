@@ -79,7 +79,7 @@ function createAdminAccount() {
 createAdminAccount()
 
 app.get("/", (request, response, next) => {
-    response.sendFile(path.join(__dirname, "/public/patient-dashboard.html"));
+    response.sendFile(path.join(__dirname, "/public/index.html"));
 });
   
 app.get("/login", (request, response, next) => {

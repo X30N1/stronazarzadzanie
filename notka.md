@@ -21,6 +21,6 @@ Wiec no :P
 >- Lekarzy więcej niż jeden. [Done]
 >- Lekarz może zobaczyć swoje dane i edytować [Backend Done (wyjatek zmiana hasla)]
 >- Pacjent może zobaczyć swoje dane i edytować [Backend Done]
->- Lekarz może nanosić uwagi do wizyty [Done / niepotrzebne bo mamy status]
+>- Lekarz może nanosić uwagi do wizyty [Done]
 >- 1 wizyta trwa 30 minut
 >- Lekarz pracuje pon-pt, godzina 8:00-16:00 oraz w co drugą sobotę 8:00-12:00.

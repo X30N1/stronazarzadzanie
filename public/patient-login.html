@@ -1,12 +1,22 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zaloguj sie</title>
-    <script type="module" src="js/patient-login.js"></script>
+    <script src="js/patient-login.js"></script>
+    <title>Logowanie Pacjenta</title>
+    <link rel="stylesheet" href="css/patient-login.css">
 </head>
 <body>
-    DO UZUPEŁNIENIA
+    <div class="login-container">
+        <h1>Zaloguj się</h1>
+        <form>
+            <input id="inputLogin" type="text" placeholder="Login" class="input-field">
+            <input id="inputPassword" type="password" placeholder="Hasło" class="input-field">
+            <input type="button" onclick="button()" value="Zaloguj" class="login-button">
+        </form>
+        <div id="error"></div>
+        <input type="button" value="Stwórz konto" onclick="toRegister()">
+    </div>
 </body>
 </html>

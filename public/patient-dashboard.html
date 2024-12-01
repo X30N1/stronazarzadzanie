@@ -1,12 +1,106 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
-    <script src="js/patient-dashboard.js"></script>
+    <title>Panel pacjenta</title>
+    <link rel="stylesheet" href="css/dashboard.css">
+
+    <script src="js/dashboard.js"></script>
+
 </head>
 <body>
-    DO UZUPEŁNIENIA
+    <header>
+        <div class="nav-left">Rejestracja</div>
+        <div class="nav-right">
+            <span id="welcome"></span>
+            <button class="logout-button" onclick="logout()">Wyloguj</button>
+        </div>
+    </header>
+
+    <main id="main-content">
+        <div class="table-container">
+            <div class="table-header">
+                <input type="button" onclick="prevPage()" value="Poprzednia Strona">
+                <input type="button" onclick="nextPage()" value="Następna Strona">
+            </div>
+            <div class="table-content">
+                <table id="table">
+                    <thead>
+                        <td>
+                            
+                        </td>
+                        <td>
+                            Imię
+                        </td>
+                        <td>
+                            Nazwisko
+                        </td>
+                        <td>
+                            Data
+                        </td>
+                        <td>
+                            Godzina
+                        </td>
+                        <td>
+                            Kontakt
+                        </td>
+                        <td>
+                            Adres
+                        </td>
+                        <td>
+                            Status / Notatki
+                        </td>
+                    </thead>
+                </table>
+            </div>
+            <div class="table-footer">
+                <span id="count">Strona 1/1 (ilość pól: 0)</span>
+                <span>Wyświetl: <select id="display-count" onchange="getListOfAppointments()"> <!-- IMPLEMENTACJA DO ZROBIENIA -->
+                    <option value="10">10</option>
+                    <option value="25">25</option>
+                    <option value="50" selected>50</option>
+                </select></span>
+            </div>
+        </div>
+
+        <div class="buttons-container">
+            <button class="delete-button" onclick="buttonRemoveAppointment()">Usuń wizytę</button>
+            <button class="edit-button" id="edit-visit-btn" onclick="showEdit()">Edytuj wizytę</button>
+            <button class="add-button" id="add-visit-btn" onclick="showAdd()">Dodaj wizytę</button>
+        </div>
+    </main>
+
+    <!-- dodaj wizytę -->
+    <div class="popup-overlay" id="popup-overlay">
+        <div class="popup">
+            <button class="close-popup" id="close-popup-btn" onclick="closePopup()">X</button>
+            <form>
+                <label for="name">Imię</label>
+                <input type="text" id="inputName" name="fname">
+                
+                <label for="lname">Nazwisko</label>
+                <input type="text" id="inputLName" name="lname">
+                
+                <label for="contact">Kontakt</label>
+                <input type="text" id="inputContact" name="contact">
+
+                <label for="address">Adres</label>
+                <input type="text" id="inputAddress" name="address">
+                
+                <label for="date">Data</label>
+                <input type="date" id="inputDate" name="date">
+                
+                <label for="time">Godzina</label>
+                <input type="time" id="inputTime" name="time">
+
+                <label for="status" class="display-edit">Status</label>
+                <input type="text" class="display-edit" id="inputStatus" name="status">
+                
+                <input type="button" id="func-save-button" class="save-button" onclick="buttonAddAppointment()" value="Dodaj"></input>
+                <input type="button" id="func-edit-button" class="edit-button" onclick="buttonEditAppointment()" value="Edytuj"></input>
+            </form>
+        </div>
+    </div>
 </body>
 </html>

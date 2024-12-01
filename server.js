@@ -213,7 +213,7 @@ app.post("/api/accounts/login", (request, response, next) => {
     })
 })
 
-app.get("/api/accounts/logout", (request, response) => {
+app.get("/logout", (request, response) => {
     request.session.destroy((err) => {
         if (err) {
             console.log(err)

@@ -506,6 +506,41 @@ app.post("/api/patients/update", (request, response, next) => {
 
 })
 
+app.post("/api/patients/checktaken", (request, response, next) => {
+  
+    const date = request.body.date
+
+    var sql = ""
+    var parameters = []
+
+    sql = "SELECT appointmentid FROM appointments WHERE appointmentDate = '%date%' ORDER BY appointmentTime DESC;"
+    .replace("%date%", date) 
+
+    db.all(sql, parameters, (error, sqlResponse) => {
+        if (error) {
+            response.status(400).json({"error":error.message})
+            return
+        }
+        return response.json({"success":sqlResponse})
+    })
+})
+
+app.post("/api/patients/getpersonel", (request, response, next) => {
+  
+    var sql = ""
+    var parameters = []
+
+    sql = "SELECT accountid, name, lname, email FROM accounts WHERE privilege = '1';"
+
+    db.all(sql, parameters, (error, sqlResponse) => {
+        if (error) {
+            response.status(400).json({"error":error.message})
+            return
+        }
+        return response.json({"success":sqlResponse})
+    })
+})
+
 app.post("/api/appointments/select", (request, response, next) => {
 
     const privilege = request.body.privilege
@@ -556,7 +591,6 @@ app.post("/api/appointments/count", (request, response, next) => {
         return response.json({"success":sqlResponse})
     })
 })
-
 
 app.post("/api/appointments/add", (request, response, next) => {
 

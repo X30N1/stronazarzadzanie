@@ -17,7 +17,7 @@ Wiec no :P
 >- Pacjent może zobaczyć swoje wizyty przyszłe i przeszłe [Backend Done]
 >- Lekarz może zarezerwować wizytę dla pacjenta. [Done]
 >- Lekarz może zobaczyć wizyty przyszłe i przeszłe [Done]
->- Lekarz może zobaczyć wizyty pacjentów tylko takich, którzy mieli u niego zarejestowane. [Weś ktoś wytłumacz bo nie rozumiem XDD]
+>- Lekarz może zobaczyć wizyty pacjentów tylko takich, którzy mieli u niego zarejestowane. [Done]
 >- Lekarzy więcej niż jeden. [Done]
 >- Lekarz może zobaczyć swoje dane i edytować [Backend Done (wyjatek zmiana hasla)]
 >- Pacjent może zobaczyć swoje dane i edytować [Backend Done]

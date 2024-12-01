@@ -266,7 +266,8 @@ async function asyncGetAppointments(limit, offset, privilege) {
     const body = JSON.stringify({
         privilege: privilege,
         limit: limit,
-        offset: offset
+        offset: offset,
+        id: sessionStorage.getItem("id")
     })
 
     const options = {
@@ -310,6 +311,7 @@ async function asyncAddAppointment(patientID, date, time, privilege) {
 
     const body = JSON.stringify({
         patientID: patientID,
+        accountID: sessionStorage.getItem("id"),
         date: date,
         time: time,
         privilege: privilege

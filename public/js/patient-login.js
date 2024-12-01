@@ -2,6 +2,7 @@ const urlAL = "http://localhost:8000/api/patients/login"
 const urlD = "http://localhost:8000/dashboard"
 const urlL = "http://localhost:8000/login"
 const urlR = "http://localhost:8000/register"
+const urlI = "http://localhost:8000"
 
 async function button() {
     const login = document.getElementById("inputLogin").value
@@ -51,4 +52,8 @@ async function asyncLogin(login, password) {
     const content = await response.json()
 
     return content
+}
+
+async function back(){
+    window.location.href = urlI
 }

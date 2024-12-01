@@ -2,6 +2,7 @@ const urlAL = "http://localhost:8000/api/accounts/login"
 const urlD = "http://localhost:8000/personel/dashboard"
 const urlL = "http://localhost:8000/personel/login"
 const urlR = "http://localhost:8000/personel/register"
+const urlI = "http://localhost:8000"
 
 async function button() {
     const login = document.getElementById("inputLogin").value
@@ -28,6 +29,10 @@ async function button() {
 
 async function toRegister() {
     window.location.href = urlR
+}
+
+async function back(){
+    window.location.href = urlI
 }
 
 async function asyncLogin(login, password) {

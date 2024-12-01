@@ -13,17 +13,13 @@
             <div class="title-bar-text">System Zarządzania</div>
             <div class="title-bar-controls">
                 <button aria-label="Restore" id="helpBtn">&quest;</button>
-                <button aria-label="Close">&times;</button>
+                <button aria-label="Close" onclick="logout()">&times;</button>
             </div>
         </div>
         <div class="window-body">      
             <menu role="tablist">
-              <li role="tab" aria-selected="true"><a href="#tabs">Użytkownicy</a></li>
-              <li role="tab"><a href="#tabs">Pacjenci</a></li>
-              <li role="tab"><a href="#tabs">Permisje</a></li>
-              <li role="tab"><a href="#tabs">Harmonogram</a></li>
-              <li role="tab"><a href="#tabs">Moderacja</a></li>
-              <li role="tab"><a href="#tabs">Inne</a></li>
+              <li role="tab" aria-selected="true"><a href="#tabs">Pacjenci</a></li>
+              <li role="tab"><a href="#tabs">Lekarze</a></li>
             </menu>
             <div class="window" role="tabpanel">
                 <div class="window-body">
@@ -31,26 +27,11 @@
                 </div>
               </div>
           </div>
-        <div class="window-body">
-            <h5><strong>System:</strong></h5>
-            <h5>Microsoft Windows 98</h5>
-            <h5>FromMouse'n Edition</h5>
-            <h5>4.10.2222A</h5>
-            <h5>08119-JESS-0001866-72097</h5>
-            <h5><strong>Computer:</strong></h5>
-            <h5>GenuineIntel</h5>
-            <h5>x86 Family XEON</h5>
-            <h5>256.0MB RAM</h5>
-        </div>
         <div class="status-bar">
             <p class="status-bar-field">Sponsored by:</p>
-            <p class="status-bar-field">INTEX XEON</p>
+            <p class="status-bar-field">INTEL XEON</p>
             <p class="status-bar-field">Server status: Active</p>
           </div>
-        <div class="button">
-            <button disabled>OK</button>
-            <button>Cancel (Dashboard)</button>
-        </div>
     </div>
     <script>
 const tabs = document.querySelectorAll('[role="tab"]');
@@ -59,12 +40,8 @@ const tabContentContainer = document.querySelector('.window[role="tabpanel"] .wi
 // FOR JESS: Tutaj każda linia to kolejna karta po kliknięciu w kartę na liściw w HTML.
 //Można sztywną stronę, albo dać skrypt żeby z serwera wywoływał stronę
 const tabContents = [
-  '<h2>Desktop</h2><p>Tu będzie skrypt do zaciągania z servera informacji.</p>', //zakładka 1 w '(treść tutaj)'
-  '<h2>My Computer</h2><p>Informacje o komputerze użytkownika. Można tu dodać inne elementy HTML.</p>',
-  '<h2>Control Panel</h2><ul><li>Opcja 1</li><li>Opcja 2</li><li>Opcja 3</li></ul>',
-  '<h2>Devices Manager</h2><p>Zarządzaj urządzeniami tutaj. Można tu dodać przyciski i inne interaktywne elementy.</p>',
-  '<h2>Hardware Profiles</h2><p>Zarządzaj profilami sprzętowymi tutaj.</p>',
-  '<h2>Performance</h2><p>Informacje o wydajności systemu.</p>'
+  '<h2>Tabela pacjentów</h2><p>Tu będzie skrypt do zaciągania z servera informacji.</p>', //zakładka 1 w '(treść tutaj)'
+  '<h2>Tabela lekarzy</h2><p>Informacje o komputerze użytkownika. Można tu dodać inne elementy HTML.</p>',
 ];
 
 function switchTab(event) {
@@ -92,7 +69,9 @@ tabs.forEach(tab => {
             </div>
         </div>
         <div class="window-body">
-            LET'T GO GAMBLING
+            <a href="https://www.youtube.com/watch?v=IPFiKEm-oNI" target="_blank">LET'S GO GAMBLING</a>
+            <br><br>
+            Tip: Wyloguj się za pomocą przycisku x w prawym górnym rogu
         </div>
     </div>
 

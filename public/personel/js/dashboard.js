@@ -227,9 +227,8 @@ async function buttonEditAppointment() {
 async function buttonRemoveAppointment() {
 
     const id = document.querySelector('input[name="select-appointment"]:checked').value;
-    const privilege = sessionStorage.getItem("privilege")
     
-    const content = await asyncRemoveAppointment(id, privilege)
+    const content = await asyncRemoveAppointment(id)
 
     if(content.message == "success") {
         getListOfAppointments()
@@ -244,6 +243,7 @@ async function asyncCount(privilege) {
 
     const body = JSON.stringify({
         privilege: privilege,
+        id: sessionStorage.getItem("id")
     })
 
     const options = {
@@ -281,15 +281,14 @@ async function asyncGetAppointments(limit, offset, privilege) {
     return content
 }
 
-async function asyncRemoveAppointment(id, privilege) { // todo
+async function asyncRemoveAppointment(id) { // todo
 
     const headers = new Headers({
         "Content-Type": "application/json"
     })
 
     const body = JSON.stringify({
-        id: id,
-        privilege: privilege
+        id: id
     })
 
     const options = {

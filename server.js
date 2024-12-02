@@ -506,6 +506,48 @@ app.post("/api/patients/update", (request, response, next) => {
 
 })
 
+app.post("/api/patients/selectappointments", (request, response, next) => {
+
+    const limit = request.body.limit
+    const offset = request.body.offset * limit
+    const id = request.body.id
+
+    var sql = ""
+    var parameters = []
+
+    sql = "SELECT a.appointmentid, a.appointmentDate, a.appointmentTime, aa.name, aa.lname FROM appointments AS a INNER JOIN accounts AS aa ON a.accountID = aa.accountID WHERE a.patientID = %id% ORDER BY a.appointmentDate DESC, a.appointmentTime DESC LIMIT %limit% OFFSET %offset%;"
+    .replace("%limit%", limit) 
+    .replace("%offset%", offset)
+    .replace("%id%", id)
+
+    db.all(sql, parameters, (error, sqlResponse) => {
+        if (error) {
+            response.status(400).json({"error":error.message})
+            return
+        }
+        return response.json({"success":sqlResponse})
+    })
+})
+
+app.post("/api/patients/count", (request, response, next) => {
+
+    const id = request.body.id
+
+    var sql = ""
+    var parameters = []
+
+    sql = "SELECT COUNT(appointmentID) AS 'count' FROM appointments WHERE patientID = %id%;"
+    .replace("%id%", id)
+
+    db.all(sql, parameters, (error, sqlResponse) => {
+        if (error) {
+            response.status(400).json({"error":error.message})
+            return
+        }
+        return response.json({"success":sqlResponse})
+    })
+})
+
 app.post("/api/patients/checktaken", (request, response, next) => {
   
     const date = request.body.date
@@ -580,10 +622,13 @@ app.post("/api/appointments/count", (request, response, next) => {
         return response.status(400).json({"error":"insufficient permissions"})
     }
 
+    const id = request.body.id
+
     var sql = ""
     var parameters = []
 
-    sql = "SELECT COUNT(appointmentID) AS 'count' FROM appointments;"
+    sql = "SELECT COUNT(appointmentID) AS 'count' FROM appointments WHERE accountID = %id%;"
+    .replace("%id%", id)
 
     db.all(sql, parameters, (error, sqlResponse) => {
         if (error) {
@@ -596,16 +641,11 @@ app.post("/api/appointments/count", (request, response, next) => {
 
 app.post("/api/appointments/add", (request, response, next) => {
 
-    const privilege = request.body.privilege
     const accountID = request.body.accountID
     const patientID = request.body.patientID
     const appointmentDate = request.body.date
     const appointmentTime = request.body.time
     const appointmentStatus = "Zaplanowane"
-
-    if(privilege < 1) {
-        return response.status(400).json({"error":"insufficient permissions"})
-    }
 
     var sql = ""
     var parameters = []
@@ -660,12 +700,7 @@ app.post("/api/appointments/update", (request, response, next) => {
 
 app.post("/api/appointments/remove", (request, response, next) => {
 
-    const privilege = request.body.privilege
     const appointmentID = request.body.id
-
-    if(privilege < 1) {
-        return response.status(400).json({"error":"insufficient permissions"})
-    }
 
     var sql = ""
     var parameters = []

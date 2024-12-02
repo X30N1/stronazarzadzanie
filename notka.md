@@ -13,8 +13,8 @@ Wiec no :P
 >- Konto admin [Done]
 >- Baza danych i okno do zarządzania pacjentami (relacja bazy spotkań do bazy wizyt) [Done?]
 >- Zarządzanie kontami dla admina [Backend Done]
->- Pacjent może zarejestrować sam wizytę u lekarza [Backend Done]
->- Pacjent może zobaczyć swoje wizyty przyszłe i przeszłe [Backend Done]
+>- Pacjent może zarejestrować sam wizytę u lekarza [Done]
+>- Pacjent może zobaczyć swoje wizyty przyszłe i przeszłe [Done]
 >- Lekarz może zarezerwować wizytę dla pacjenta. [Done]
 >- Lekarz może zobaczyć wizyty przyszłe i przeszłe [Done]
 >- Lekarz może zobaczyć wizyty pacjentów tylko takich, którzy mieli u niego zarejestowane. [Done]
@@ -22,5 +22,5 @@ Wiec no :P
 >- Lekarz może zobaczyć swoje dane i edytować [Backend Done]
 >- Pacjent może zobaczyć swoje dane i edytować [Backend Done]
 >- Lekarz może nanosić uwagi do wizyty [Done]
->- 1 wizyta trwa 30 minut
->- Lekarz pracuje pon-pt, godzina 8:00-16:00 oraz w co drugą sobotę 8:00-12:00.
+>- 1 wizyta trwa 30 minut [Done]
+>- Lekarz pracuje pon-pt, godzina 8:00-16:00 oraz w co drugą sobotę 8:00-12:00. [Done]

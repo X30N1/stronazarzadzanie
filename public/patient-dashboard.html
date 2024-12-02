@@ -19,8 +19,14 @@
     </header>
 
     <main id="main-content">
-        <div id="select-date"><label for="check-date">Wybierz datę:</label>
+        <div id="select-date" class="table-container">
+            <label for="display-personel">Wybierz lekarza:</label>
+            <select name="display-personel" id="display-personel" onchange="getListOfAppointments()">
+
+            <label for="check-date">Wybierz datę:</label>
             <input type="date" name="check-date" id="check-date" onchange="getListOfAppointments()">
+
+            </select>
             <select id="display-time">
                 <option value="08:00">08:00</option> <!-- pon-pt -->
                 <option value="08:30">08:30</option>
@@ -41,8 +47,48 @@
             </select>
         </div>
         <div class="buttons-container">
-            <button class="delete-button" onclick="buttonRemoveAppointment()">Usuń wcześniej umówioną wizytę</button>
-            <button class="add-button" id="add-visit-btn" onclick="showAdd()">Umów wizytę</button>
+            <button class="add-button" id="add-visit-btn" onclick="buttonAddAppointment()">Umów wizytę</button>
+        </div>
+
+        <div class="table-container">
+            <div class="table-header">
+                <input type="button" onclick="prevPage()" value="Poprzednia Strona">
+                <h4>Twoje poprzednie umówienia na wizyty.</h4>
+                <input type="button" onclick="nextPage()" value="Następna Strona">
+            </div>
+            <div class="table-content">
+                <table id="table">
+                    <thead>
+                        <td>
+                            
+                        </td>
+                        <td>
+                            Imię lekarza
+                        </td>
+                        <td>
+                            Nazwisko lekarza
+                        </td>
+                        <td>
+                            Data
+                        </td>
+                        <td>
+                            Godzina
+                        </td>
+                    </thead>
+                </table>
+            </div>
+            <div class="table-footer">
+                <span id="count">Strona 1/1 (ilość pól: 0)</span>
+                <span>Wyświetl: <select id="display-count" onchange="getListOfAppointments()">
+                    <option value="10">10</option>
+                    <option value="25">25</option>
+                    <option value="50" selected>50</option>
+                </select></span>
+            </div>
+        </div>
+
+        <div class="buttons-container">
+            <button class="delete-button" onclick="buttonRemoveAppointment()">Usuń wizytę</button>
         </div>
 
     </main>

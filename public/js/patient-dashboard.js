@@ -1,9 +1,15 @@
 const urlAA = "http://localhost:8000/api/appointments/add"
 const urlGC = "http://localhost:8000/api/patients/checktaken"
 const urlGP = "http://localhost:8000/api/patients/getpersonel"
+const urlSA = "http://localhost:8000/api/patients/selectappointments"
+const urlPC = "http://localhost:8000/api/patients/count"
+const urlRA = "http://localhost:8000/api/appointments/remove"
 const urlD = "http://localhost:8000/dashboard"
 const urlLO = "http://localhost:8000/logout"
 const urlLI = "http://localhost:8000/login"
+
+var currentPage = 1
+var maxPages = 1
 
 Date.prototype.getWeek = function (dowOffset) {
     /*getWeek() was developed by Nick Baicoianu at MeanFreePath: http://www.meanfreepath.com */
@@ -38,19 +44,17 @@ var data = {}
 window.onload = async function() {
 
     document.getElementById("welcome").innerHTML = "Witaj " + sessionStorage.getItem("name")
-    getListOfAppointments(1)
+    getListOfAppointments()
+
+    var content = await asyncGetPersonel()
+    data = content.success
+
+    displayPersonel(data)
+    console.log("bruh")
 
 }
 
-async function getListOfAppointments(t) {
-    
-    if(t == 1) {
-        var content = await asyncGetPersonel()
-        data = content.success
-
-        displayPersonel(data)
-        console.log("bruh")
-    }
+async function getListOfAppointments() {
 
     var content = await asyncGetAppointments(document.getElementById('display-personel').value)
     data = content.success
@@ -74,6 +78,18 @@ async function getListOfAppointments(t) {
 
     displayAppointments(data, type)
     
+    var count = await asyncPatientCount()
+    count = Number(count.success[0].count)
+    var maxPerPage = document.getElementById("display-count").value
+    console.log(maxPerPage)
+    maxPages = 1 + Math.floor(count / maxPerPage) 
+    document.getElementById("count").innerHTML = "Strona " + currentPage + "/" + maxPages + " (ilość pól: " + count + ")"
+
+    var content = await asyncGetPatientAppointments(maxPerPage, (currentPage - 1))
+    data = content.success
+
+    displayPatientAppointments(data)
+    
 }
 
 async function closePopup() {
@@ -88,6 +104,61 @@ async function showPopup() {
     const mainContent = document.getElementById('main-content');
     popupOverlay.style.display = 'flex';
     mainContent.classList.add('blur');
+}
+
+async function buttonAddAppointment() {
+    id = document.getElementById("display-personel").value
+    date = document.getElementById("check-date").value
+    time = document.getElementById("display-time").value
+
+    var content = await asyncAddAppointment(id, date, time)
+    if(content.success) {
+        showPopup()
+        getListOfAppointments()
+    }
+}
+
+async function displayPatientAppointments(content) {
+    if(document.getElementById("table-data") != null) {
+        document.getElementById("table-data").remove()
+    }
+    var test = document.createElement("tbody")
+    test.id = "table-data"
+    for(i in content) {
+        var tr = document.createElement("tr")
+        var tdSelector = document.createElement("td")
+        var selector = document.createElement("input")
+        selector.type = "radio"
+        selector.name = "select-appointment"
+        selector.value = content[i].appointmentID
+        tdSelector.appendChild(selector)
+        tr.appendChild(tdSelector)
+
+        for(j = 0; j < 4; j++) {
+            var element = document.createElement("td")
+            console.log(content[i])
+            switch(j) {
+                case 0:
+                    var text = document.createTextNode(content[i].name)
+                    break
+                case 1:
+                    var text = document.createTextNode(content[i].lname)
+                    break
+                case 2:
+                    var text = document.createTextNode(content[i].appointmentDate)
+                    break
+                case 3:
+                    var text = document.createTextNode(content[i].appointmentTime)
+                    break
+            }
+            
+            element.appendChild(text)
+            tr.appendChild(element)
+        }
+        
+        test.appendChild(tr)
+    }
+    document.getElementById("table").append(test)
 }
 
 async function displayAppointments(content, type) {
@@ -132,26 +203,67 @@ async function displayAppointments(content, type) {
 }
 
 async function displayPersonel(content) {
-    if(document.getElementById("display-personel") != null) {
-        document.getElementById("display-personel").remove()
-    }
 
-    var test = document.createElement("select")
-    test.id = "display-personel"
+    var test = document.getElementById('display-personel')
+
+    if(document.getElementsByClassName("dp") != null) {
+        document.querySelectorAll(".dp").forEach(el => el.remove());
+    }
     
     for(i in content) {
         var option = document.createElement("option")
         option.value = content[i].accountID
         option.innerHTML = content[i].name + " " + content[i].lname
+        option.className = "dp"
         test.appendChild(option)
     }
+}
 
-    document.getElementById("select-date").append(test)
+async function buttonRemoveAppointment() {
+
+    const id = document.querySelector('input[name="select-appointment"]:checked').value;
+    
+    const content = await asyncRemoveAppointment(id)
+
+    if(content.message == "success") {
+        getListOfAppointments()
+    }
+}
+
+async function asyncRemoveAppointment(id) { // todo
+
+    const headers = new Headers({
+        "Content-Type": "application/json"
+    })
+
+    const body = JSON.stringify({
+        id: id
+    })
+
+    const options = {
+        method: "POST",
+        headers: headers,
+        body: body
+    }
+
+    const response = await fetch(urlRA, options)
+    const content = await response.json()
+    return content
 }
 
 async function asyncGetAppointments(id) { // todo
 
     date = document.getElementById("check-date").value
+    nd = new Date(date)
+    dn = new Date(Date.now())
+
+    if(nd.getDay() < dn.getDay() || nd.getMonth() < dn.getMonth() || nd.getFullYear() < dn.getFullYear()) {
+        if(document.getElementById("display-time") != null) {
+            document.getElementById("display-time").remove()
+        }
+        return 
+    }
+
     console.log(date)
 
     const headers = new Headers({
@@ -170,6 +282,50 @@ async function asyncGetAppointments(id) { // todo
     }
 
     const response = await fetch(urlGC, options)
+    const content = await response.json()
+    return content
+}
+
+async function asyncGetPatientAppointments(limit, offset) {
+
+    const headers = new Headers({
+        "Content-Type": "application/json"
+    })
+
+    const body = JSON.stringify({
+        limit: limit,
+        offset: offset,
+        id: sessionStorage.getItem("id")
+    })
+
+    const options = {
+        method: "POST",
+        headers: headers,
+        body: body
+    }
+
+    const response = await fetch(urlSA, options)
+    const content = await response.json()
+    return content
+}
+
+async function asyncPatientCount() {
+
+    const headers = new Headers({
+        "Content-Type": "application/json"
+    })
+
+    const body = JSON.stringify({
+        id: sessionStorage.getItem("id")
+    })
+
+    const options = {
+        method: "POST",
+        headers: headers,
+        body: body
+    }
+
+    const response = await fetch(urlPC, options)
     const content = await response.json()
     return content
 }
@@ -216,7 +372,7 @@ async function asyncRemoveAppointment(id, privilege) { // todo
     return content
 }
 
-async function asyncAddAppointment(accountID, date, time, privilege) {
+async function asyncAddAppointment(accountID, date, time) {
 
     const headers = new Headers({
         "Content-Type": "application/json"
@@ -226,8 +382,7 @@ async function asyncAddAppointment(accountID, date, time, privilege) {
         patientID: sessionStorage.getItem("id"),
         accountID: accountID,
         date: date,
-        time: time,
-        privilege: privilege
+        time: time
     })
 
     const options = {

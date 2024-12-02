@@ -23,7 +23,7 @@ body {
 #header{
     width: 100%;
     padding-left: 2vw;
-    padding-right: 2vw;;
+    padding-right: 1vw;;
 }
 
 #buttons{
@@ -37,6 +37,7 @@ body {
     cursor: pointer;
     width: 7vw;;
     padding: 1vh;
+    min-width: 150px;
 }
 
 #patient-button{

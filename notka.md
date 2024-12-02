@@ -19,7 +19,7 @@ Wiec no :P
 >- Lekarz może zobaczyć wizyty przyszłe i przeszłe [Done]
 >- Lekarz może zobaczyć wizyty pacjentów tylko takich, którzy mieli u niego zarejestowane. [Done]
 >- Lekarzy więcej niż jeden. [Done]
->- Lekarz może zobaczyć swoje dane i edytować [Backend Done (wyjatek zmiana hasla)]
+>- Lekarz może zobaczyć swoje dane i edytować [Backend Done]
 >- Pacjent może zobaczyć swoje dane i edytować [Backend Done]
 >- Lekarz może nanosić uwagi do wizyty [Done]
 >- 1 wizyta trwa 30 minut

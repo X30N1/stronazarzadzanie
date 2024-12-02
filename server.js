@@ -509,12 +509,14 @@ app.post("/api/patients/update", (request, response, next) => {
 app.post("/api/patients/checktaken", (request, response, next) => {
   
     const date = request.body.date
+    const accountID = request.body.id
 
     var sql = ""
     var parameters = []
 
-    sql = "SELECT appointmentid FROM appointments WHERE appointmentDate = '%date%' ORDER BY appointmentTime DESC;"
-    .replace("%date%", date) 
+    sql = "SELECT appointmentTime FROM appointments WHERE appointmentDate = '%date%' AND accountID = %accountID% ORDER BY appointmentTime DESC;"
+    .replace("%date%", date)
+    .replace("%accountID%", accountID)
 
     db.all(sql, parameters, (error, sqlResponse) => {
         if (error) {

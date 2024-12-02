@@ -19,9 +19,9 @@
     </header>
 
     <main id="main-content">
-        <div id="selectDate"><label for="checkDate">Wybierz datę:</label>
-            <input type="date" name="checkDate" id="check-date">
-            <select id="display-time" onchange="getListOfAppointments()">
+        <div id="select-date"><label for="check-date">Wybierz datę:</label>
+            <input type="date" name="check-date" id="check-date" onchange="getListOfAppointments()">
+            <select id="display-time">
                 <option value="08:00">08:00</option> <!-- pon-pt -->
                 <option value="08:30">08:30</option>
                 <option value="09:00">09:00</option>
@@ -41,9 +41,8 @@
             </select>
         </div>
         <div class="buttons-container">
-            <button class="delete-button" onclick="buttonRemoveAppointment()">Usuń wizytę</button>
-            <button class="edit-button" id="edit-visit-btn" onclick="showEdit()">Edytuj wizytę</button>
-            <button class="add-button" id="add-visit-btn" onclick="showAdd()">Dodaj wizytę</button>
+            <button class="delete-button" onclick="buttonRemoveAppointment()">Usuń wcześniej umówioną wizytę</button>
+            <button class="add-button" id="add-visit-btn" onclick="showAdd()">Umów wizytę</button>
         </div>
 
     </main>

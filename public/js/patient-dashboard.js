@@ -1,55 +1,79 @@
 const urlAA = "http://localhost:8000/api/appointments/add"
 const urlGC = "http://localhost:8000/api/patients/checktaken"
+const urlGP = "http://localhost:8000/api/patients/getpersonel"
 const urlD = "http://localhost:8000/dashboard"
 const urlLO = "http://localhost:8000/logout"
 const urlLI = "http://localhost:8000/login"
+
+Date.prototype.getWeek = function (dowOffset) {
+    /*getWeek() was developed by Nick Baicoianu at MeanFreePath: http://www.meanfreepath.com */
+
+    dowOffset = typeof(dowOffset) == 'number' ? dowOffset : 0; //default dowOffset to zero
+    var newYear = new Date(this.getFullYear(),0,1);
+    var day = newYear.getDay() - dowOffset; //the day of week the year begins on
+    day = (day >= 0 ? day : day + 7);
+    var daynum = Math.floor((this.getTime() - newYear.getTime() - 
+    (this.getTimezoneOffset()-newYear.getTimezoneOffset())*60000)/86400000) + 1;
+    var weeknum;
+    //if the year starts before the middle of a week
+    if(day < 4) {
+        weeknum = Math.floor((daynum+day-1)/7) + 1;
+        if(weeknum > 52) {
+            nYear = new Date(this.getFullYear() + 1,0,1);
+            nday = nYear.getDay() - dowOffset;
+            nday = nday >= 0 ? nday : nday + 7;
+            /*if the next year starts before the middle of
+                the week, it is week #1 of that year*/
+            weeknum = nday < 4 ? 1 : 53;
+        }
+    }
+    else {
+        weeknum = Math.floor((daynum+day-1)/7);
+    }
+    return weeknum;
+};
 
 var data = {}
 
 window.onload = async function() {
 
     document.getElementById("welcome").innerHTML = "Witaj " + sessionStorage.getItem("name")
-    document.getElementById("check-date").value = new Date(Date.now()).getDate()
-
-    getListOfAppointments()
+    getListOfAppointments(1)
 
 }
 
-async function getListOfAppointments() {
+async function getListOfAppointments(t) {
     
-    var content = await asyncGetAppointments()
+    if(t == 1) {
+        var content = await asyncGetPersonel()
+        data = content.success
+
+        displayPersonel(data)
+        console.log("bruh")
+    }
+
+    var content = await asyncGetAppointments(document.getElementById('display-personel').value)
     data = content.success
 
-    console.log(content)
-
-}
-
-async function buttonAddAppointment() {
-
-    const name = document.getElementById("inputName").value
-    const lname = document.getElementById("inputLName").value
-    const contact = document.getElementById("inputContact").value
-    const address = document.getElementById("inputAddress").value
-    const date = document.getElementById("inputDate").value
-    const time = document.getElementById("inputTime").value
-    const privilege = sessionStorage.getItem("privilege")
-
-    const content = await asyncAddPatient(name, lname, contact, address, privilege)
-    console.log(content)
-
-    const id = content.success[0].patientID
-    console.log(id)
-
-    if(content.message != "success") {
-        getListOfAppointments()
+    for(i in data) {
+        console.log(data[i].appointmentTime)
     }
+
+    console.log(content.success)
+    date = new Date(document.getElementById('check-date').value)
+    type = 0
+    if(date.getWeek() % 2 == 0 && date.getDay() == 6) {
+        type = 0
+    }
+    else if (date.getDay() >= 1 && date.getDay() <= 5) {
+        type = 1
+    }
+    else {
+        type = 2
+    }
+
+    displayAppointments(data, type)
     
-    const content2 = await asyncAddAppointment(id, date, time, privilege)
-    console.log(content2)
-
-    if(content2.success) {
-        getListOfAppointments()
-    }
 }
 
 async function closePopup() {
@@ -66,16 +90,77 @@ async function showPopup() {
     mainContent.classList.add('blur');
 }
 
-async function asyncGetAppointments() { // todo
+async function displayAppointments(content, type) {
+    if(document.getElementById("display-time") != null) {
+        document.getElementById("display-time").remove()
+    }
+    possibleDates = []
+    if(type == 0) {
+        possibleDates = ["08:00", "08:30", "09:00", "09:30", "10:00", "10:30", "11:00", "11:30"]
+    }
+    else if(type == 1) {
+        possibleDates = ["08:00", "08:30", "09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30"]
+    }
+    else {
+        return
+    }
+
+    for(i in content) {
+        a = possibleDates.indexOf(content[i].appointmentTime)
+        if (a > -1) {
+            possibleDates.splice(a, 1)
+        }
+        console.log(content[i].appointmentTime)
+        console.log(a)
+    }
+
+    if(possibleDates == []) {
+        return
+    }
+
+    var test = document.createElement("select")
+    test.id = "display-time"
+    
+    for(i in possibleDates) {
+        var option = document.createElement("option")
+        option.value = possibleDates[i]
+        option.innerHTML = possibleDates[i]
+        test.appendChild(option)
+    }
+
+    document.getElementById("select-date").append(test)
+}
+
+async function displayPersonel(content) {
+    if(document.getElementById("display-personel") != null) {
+        document.getElementById("display-personel").remove()
+    }
+
+    var test = document.createElement("select")
+    test.id = "display-personel"
+    
+    for(i in content) {
+        var option = document.createElement("option")
+        option.value = content[i].accountID
+        option.innerHTML = content[i].name + " " + content[i].lname
+        test.appendChild(option)
+    }
+
+    document.getElementById("select-date").append(test)
+}
+
+async function asyncGetAppointments(id) { // todo
 
     date = document.getElementById("check-date").value
+    console.log(date)
 
     const headers = new Headers({
         "Content-Type": "application/json"
     })
 
     const body = JSON.stringify({
-        date: date
+        date: date,
+        id: id
     })
 
     const options = {
@@ -85,6 +170,26 @@ async function asyncGetAppointments() { // todo
     }
 
     const response = await fetch(urlGC, options)
+    const content = await response.json()
+    return content
+}
+
+async function asyncGetPersonel() {
+
+    const headers = new Headers({
+        "Content-Type": "application/json"
+    })
+
+    const body = JSON.stringify({
+    })
+
+    const options = {
+        method: "POST",
+        headers: headers,
+        body: body
+    }
+
+    const response = await fetch(urlGP, options)
     const content = await response.json()
     return content
 }

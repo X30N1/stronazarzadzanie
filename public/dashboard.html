@@ -102,5 +102,34 @@
             </form>
         </div>
     </div>
+
+    <div class="popup-change-account" id="popup-change-account">
+        <div>
+            <button class="close-popup" id="close-popup-btn" onclick="closePopup()">X</button>
+            <form>
+                <label for="name">Imię</label>
+                <input type="text" id="inputAName" name="fname">
+                
+                <label for="lname">Nazwisko</label>
+                <input type="text" id="inputALName" name="lname">
+                
+                <label for="email">Adres E-Mail</label>
+                <input type="text" id="inputAContact" name="email">
+
+                <label for="oldpsw">Stare Hasło*</label>
+                <input type="password" id="inputAOldPassword" name="oldpswd">
+                
+                <label for="newpsd">Nowe Hasło*</label>
+                <input type="password" id="inputANewPassword" name="newpsd">
+                
+                <label for="cnfpsd">Powtórz Nowe Hasło*</label>
+                <input type="password" id="inputAConfirmNewPassword" name="cnfpsd">
+
+                <span>* - (zostaw puste, jeżeli nie chcesz zmieniać)</span>
+                
+                <input type="button" id="acc-edit-button" class="edit-button" onclick="buttonEditAccount()" value="Edytuj"></input>
+            </form>
+        </div>
+    </div>
 </body>
 </html>

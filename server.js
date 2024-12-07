@@ -473,17 +473,12 @@ app.post("/api/patients/add", (request, response, next) => { // Masakra, pewnie 
 
 app.post("/api/patients/update", (request, response, next) => {
 
-    const privilege = request.body.privilege
     const patientID = request.body.patientID
     const patientName = request.body.patientName
     const patientLName = request.body.patientLName
     const patientContact = request.body.patientContact
     const patientAddress = request.body.patientAddress
     const patientEmail = request.body.email
-
-    if(privilege < 1) {
-        return response.status(400).json({"error":"insufficient permissions"})
-    }
 
     var sql = ""
     var parameters = []
@@ -504,6 +499,118 @@ app.post("/api/patients/update", (request, response, next) => {
         return response.json({"message":"success"})
     })
 
+})
+
+app.post("/api/patients/changepassword", (request, response, next) => {
+
+    const patientID = request.body.id
+    const password = request.body.password
+    const newPassword = request.body.newPassword
+
+    var sql = ""
+    var parameters = []
+
+    sql = "SELECT patientPassword FROM patients WHERE patientID = '%patientID%';"
+    .replace("%patientID%", patientID) 
+
+    var sql2 = "UPDATE patients SET patientPassword = '%newPassword%' WHERE patientID = '%patientID%';"
+    .replace("%patientID%", patientID) 
+
+    db.all(sql, parameters, (error, sqlResponse) => {
+
+        if (error) {
+            response.status(400).json({"error":error.message})
+            return
+        }
+        if(sqlResponse.length == 0) {
+            response.json({
+                "message": "doesntExist"
+            })
+            return
+        }
+
+        var hash = sqlResponse[0].patientPassword
+
+        bcrypt.compare(password, hash, function(err, result) {
+            if(!result || err) {
+                response.json({"message":"failure"})
+                return
+            }
+            
+            bcrypt.hash(newPassword, saltRounds, function(error, hash2) {
+                if (error) {
+                    return response.json({"error":err})
+                }
+        
+                sql2 = sql2.replace('%newPassword%', hash2)
+                var parameters = []
+        
+                db.all(sql, parameters, (error, sqlResponse) => {
+                    if (error) {
+                        response.status(400).json({"error":error.message})
+                        return
+                    }
+                    return response.json({"message":"success"})
+                })
+            });
+        })
+    })
+})
+
+app.post("/api/accounts/changepassword", (request, response, next) => {
+
+    const id = request.body.id
+    const password = request.body.password
+    const newPassword = request.body.newPassword
+
+    var sql = ""
+    var parameters = []
+
+    sql = "SELECT accountID, password FROM accounts WHERE accountID = '%accountID%';"
+    .replace("%patientID%", id) 
+
+    var sql2 = "UPDATE accounts SET password = '%newPassword%' WHERE accountID = '%accountID%';"
+    .replace("%patientID%", id) 
+
+    db.all(sql, parameters, (error, sqlResponse) => {
+
+        if (error) {
+            response.status(400).json({"error":error.message})
+            return
+        }
+        if(sqlResponse.length == 0) {
+            response.json({
+                "message": "doesntExist"
+            })
+            return
+        }
+
+        var hash = sqlResponse[0].password
+
+        bcrypt.compare(password, hash, function(err, result) {
+            if(!result || err) {
+                response.json({"message":"failure"})
+                return
+            }
+            
+            bcrypt.hash(newPassword, saltRounds, function(error, hash2) {
+                if (error) {
+                    return response.json({"error":err})
+                }
+        
+                sql2 = sql2.replace('%newPassword%', hash2)
+                var parameters = []
+        
+                db.all(sql, parameters, (error, sqlResponse) => {
+                    if (error) {
+                        response.status(400).json({"error":error.message})
+                        return
+                    }
+                    return response.json({"message":"success"})
+                })
+            });
+        })
+    })
 })
 
 app.post("/api/patients/selectappointments", (request, response, next) => {

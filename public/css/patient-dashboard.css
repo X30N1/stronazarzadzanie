@@ -165,6 +165,10 @@ select {
     background-color: #d1d1d1;
 }
 
+.breaker {
+    margin-top: 20px;
+}
+
 
 .popup-overlay {
     position: fixed;

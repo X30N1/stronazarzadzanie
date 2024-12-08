@@ -57,7 +57,7 @@ async function button() {
     const passwordC = document.getElementById("inputPasswordC").value
     const privilege = 1
 
-    if(name == "" || lname == "" || email == "" || contact == "" || address == "" || login == "" || password == "" || password == "") {
+    if(name == "" || lname == "" || email == "" || contact == "" || address == "" || login == "" || password == "" || passwordC == "") {
         document.cookie = "message = missingInput; SameSite = None; Max-Age = 1000; Secure; path=/register;"
         document.getElementById("error").innerHTML = "<b>Błąd:</b> Wszystkie pola muszą być uzupełnione."
         return

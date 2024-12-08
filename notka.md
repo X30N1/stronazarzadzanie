@@ -20,7 +20,7 @@ Wiec no :P
 >- Lekarz może zobaczyć wizyty pacjentów tylko takich, którzy mieli u niego zarejestowane. [Done]
 >- Lekarzy więcej niż jeden. [Done]
 >- Lekarz może zobaczyć swoje dane i edytować [Backend Done]
->- Pacjent może zobaczyć swoje dane i edytować [Backend Done]
+>- Pacjent może zobaczyć swoje dane i edytować [Done]
 >- Lekarz może nanosić uwagi do wizyty [Done]
 >- 1 wizyta trwa 30 minut [Done]
 >- Lekarz pracuje pon-pt, godzina 8:00-16:00 oraz w co drugą sobotę 8:00-12:00. [Done]

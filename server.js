@@ -336,7 +336,7 @@ app.post("/api/patients/login", (request, response, next) => {
     var sql = ""
     var parameters = []
 
-    sql = "SELECT patientID, patientPassword, patientName, patientLName FROM patients WHERE patientLogin = '%login%';"
+    sql = "SELECT patientID, patientPassword, patientName, patientLName, patientEmail, patientContact, patientAddress FROM patients WHERE patientLogin = '%login%';"
     .replace("%login%", login) 
 
     db.all(sql, parameters, (error, sqlResponse) => {
@@ -354,6 +354,9 @@ app.post("/api/patients/login", (request, response, next) => {
         var hash = sqlResponse[0].patientPassword
         var name = sqlResponse[0].patientName
         var lname = sqlResponse[0].patientLName
+        var email = sqlResponse[0].patientEmail
+        var contact = sqlResponse[0].patientContact
+        var address = sqlResponse[0].patientAddress
         var id = sqlResponse[0].patientID
 
         bcrypt.compare(password, hash, function(err, result) {
@@ -372,7 +375,10 @@ app.post("/api/patients/login", (request, response, next) => {
                 id: id,
                 login: login,
                 name: name,
-                lname: lname
+                lname: lname,
+                email: email,
+                contact: contact,
+                address: address
             })
             return
         })
@@ -478,17 +484,17 @@ app.post("/api/patients/update", (request, response, next) => {
     const patientLName = request.body.patientLName
     const patientContact = request.body.patientContact
     const patientAddress = request.body.patientAddress
-    const patientEmail = request.body.email
+    const patientEmail = request.body.patientEmail
 
     var sql = ""
     var parameters = []
 
-    sql = "UPDATE patients SET patientName = '%patientName%', patientLName = '%patientLName%', patientContact = '%patientContact%', patientAddress = '%patientAdress%', patientEmail = '%patientEmail%' WHERE patientID = %patientID%;"
-    .replace("%patientName", patientName)
+    sql = "UPDATE patients SET patientName = '%patientName%', patientLName = '%patientLName%', patientContact = '%patientContact%', patientAddress = '%patientAddress%', patientEmail = '%patientEmail%' WHERE patientID = %patientID%;"
+    .replace("%patientName%", patientName)
     .replace("%patientLName%", patientLName)
     .replace("%patientContact%", patientContact)
     .replace("%patientID%", patientID)
-    .replace("%patientAddress", patientAddress)
+    .replace("%patientAddress%", patientAddress)
     .replace("%patientEmail%", patientEmail)
 
     db.all(sql, parameters, (error, sqlResponse) => {
@@ -510,10 +516,10 @@ app.post("/api/patients/changepassword", (request, response, next) => {
     var sql = ""
     var parameters = []
 
-    sql = "SELECT patientPassword FROM patients WHERE patientID = '%patientID%';"
+    sql = "SELECT patientPassword FROM patients WHERE patientID = %patientID%;"
     .replace("%patientID%", patientID) 
 
-    var sql2 = "UPDATE patients SET patientPassword = '%newPassword%' WHERE patientID = '%patientID%';"
+    var sql2 = "UPDATE patients SET patientPassword = '%newPassword%' WHERE patientID = %patientID%;"
     .replace("%patientID%", patientID) 
 
     db.all(sql, parameters, (error, sqlResponse) => {
@@ -541,11 +547,11 @@ app.post("/api/patients/changepassword", (request, response, next) => {
                 if (error) {
                     return response.json({"error":err})
                 }
-        
+                
                 sql2 = sql2.replace('%newPassword%', hash2)
                 var parameters = []
         
-                db.all(sql, parameters, (error, sqlResponse) => {
+                db.all(sql2, parameters, (error, sqlResponse) => {
                     if (error) {
                         response.status(400).json({"error":error.message})
                         return

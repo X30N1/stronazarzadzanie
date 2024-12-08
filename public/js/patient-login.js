@@ -19,7 +19,9 @@ async function button() {
         sessionStorage.setItem("login", login)
         sessionStorage.setItem("name", content.name)
         sessionStorage.setItem("lname", content.lname)
-        sessionStorage.setItem("privilege", content.privilege)
+        sessionStorage.setItem("email", content.email)
+        sessionStorage.setItem("contact", content.contact)
+        sessionStorage.setItem("address", content.address)
         window.location.href = urlD
     }
     else {

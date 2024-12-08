@@ -3,6 +3,9 @@ const urlGC = "http://localhost:8000/api/patients/checktaken"
 const urlGP = "http://localhost:8000/api/patients/getpersonel"
 const urlSA = "http://localhost:8000/api/patients/selectappointments"
 const urlPC = "http://localhost:8000/api/patients/count"
+const urlPU = "http://localhost:8000/api/patients/update"
+const urlPCP = "http://localhost:8000/api/patients/changepassword"
+const urlPCh = "http://localhost:8000/api/cert/password"
 const urlRA = "http://localhost:8000/api/appointments/remove"
 const urlD = "http://localhost:8000/dashboard"
 const urlLO = "http://localhost:8000/logout"
@@ -104,6 +107,85 @@ async function showPopup() {
     const mainContent = document.getElementById('main-content');
     popupOverlay.style.display = 'flex';
     mainContent.classList.add('blur');
+}
+
+async function closePopupAccount() {
+    const popupOverlay = document.getElementById('popup-overlay-account');
+    const mainContent = document.getElementById('main-content');
+    popupOverlay.style.display = 'none';
+    mainContent.classList.remove('blur');
+}
+
+async function showPopupAccount() {
+    const popupOverlay = document.getElementById('popup-overlay-account');
+    const mainContent = document.getElementById('main-content');
+    popupOverlay.style.display = 'flex';
+    mainContent.classList.add('blur');
+    document.getElementById("inputAName").value = sessionStorage.getItem("name")
+    document.getElementById("inputALName").value = sessionStorage.getItem("lname")
+    document.getElementById("inputAEMail").value = sessionStorage.getItem("email")
+    document.getElementById("inputAContact").value = sessionStorage.getItem("contact")
+    document.getElementById("inputAAddress").value = sessionStorage.getItem("address")
+}
+
+async function buttonEditAccount(){
+    const name = document.getElementById("inputAName").value
+    const lname = document.getElementById("inputALName").value
+    const email = document.getElementById("inputAEMail").value
+    const contact = document.getElementById("inputAContact").value
+    const address = document.getElementById("inputAAddress").value
+    const oldpsw = document.getElementById("inputAOldPassword").value
+    const newpsw = document.getElementById("inputANewPassword").value
+    const cnewpsw = document.getElementById("inputAConfirmNewPassword").value
+
+    if(name == "" || lname == "" || email == "" || contact == "" || address == "") { 
+
+    }
+    if(oldpsw != "" && newpsw != "" && cnewpsw != "") {
+        if(newpsw != cnewpsw) {
+            document.getElementById("error-info").innerHTML = "<b>Błąd:</b> Hasła nie są identyczne."
+            return
+        }
+        else if(newpsw.length < 12) {
+            document.getElementById("error-info").innerHTML = "<b>Błąd:</b> Hasło jest za krótkie"
+            return
+        }
+        else if(/\d/.test(newpsw) == false) {
+            document.getElementById("error-info").innerHTML = "<b>Błąd:</b> Hasło musi zawierać co najmniej jedna cyfrę."
+            return
+        }
+    
+        var checkPassword = await asyncCheckCert(newpsw)
+        console.log(checkPassword)
+    
+        if(checkPassword.message == 'failure') {
+            document.getElementById("error-info").innerHTML = "<b>Błąd:</b> Hasło znajduje sie w bazie danych popularnych haseł!"
+            return
+        }
+        
+        var content = await asyncChangePassword(oldpsw, newpsw)
+
+        if(content.message == "failure") {
+            document.getElementById("error-info").innerHTML = "<b>Błąd:</b> Hasła nie były identyczne!"
+            return
+        }
+    }
+
+    var content = await asyncUpdateAccount(name, lname, email, contact, address)
+
+    if(content.message == "success") {
+        sessionStorage.setItem("name", name)
+        sessionStorage.setItem("lname", lname)
+        sessionStorage.setItem("email", email)
+        sessionStorage.setItem("contact", contact)
+        sessionStorage.setItem("address", address)
+        document.getElementById("welcome").innerHTML = "Witaj " + sessionStorage.getItem("name")
+    }
+    else {
+        document.getElementById("error-info").innerHTML = "<b>Błąd:</b> Wystąpił jakiś błąd!"
+        return
+    }
+    closePopupAccount()
 }
 
 async function buttonAddAppointment() {
@@ -392,6 +474,77 @@ async function asyncAddAppointment(accountID, date, time) {
     }
 
     const response = await fetch(urlAA, options)
+    const content = await response.json()
+    return content
+}
+
+async function asyncCheckCert(password) {
+
+    const headers = new Headers({
+        "Content-Type": "application/json"
+    })
+
+    const body = JSON.stringify({
+        password: password
+    })
+
+    const options = {
+        method: "POST",
+        headers: headers,
+        body: body
+    }
+
+    const response = await fetch(urlPCh, options)
+    const content = await response.json()
+    return content
+
+}
+
+async function asyncChangePassword(oldpsw, newpsw) {
+
+    const headers = new Headers({
+        "Content-Type": "application/json"
+    })
+
+    const body = JSON.stringify({
+        id: sessionStorage.getItem("id"),
+        password: oldpsw,
+        newPassword: newpsw
+    })
+
+    const options = {
+        method: "POST",
+        headers: headers,
+        body: body
+    }
+
+    const response = await fetch(urlPCP, options)
+    const content = await response.json()
+    return content
+}
+
+async function asyncUpdateAccount(name, lname, email, contact, address) {
+
+    const headers = new Headers({
+        "Content-Type": "application/json"
+    })
+
+    const body = JSON.stringify({
+        patientID: sessionStorage.getItem("id"),
+        patientName: name,
+        patientLName: lname,
+        patientEmail: email,
+        patientContact: contact,
+        patientAddress: address
+    })
+
+    const options = {
+        method: "POST",
+        headers: headers,
+        body: body
+    }
+
+    const response = await fetch(urlPU, options)
     const content = await response.json()
     return content
 }

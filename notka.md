@@ -23,4 +23,4 @@ Wiec no :P
 >- Lekarz może nanosić uwagi do wizyty [Done]
 >- 1 wizyta trwa 30 minut [Done]
 >- Lekarz pracuje pon-pt, godzina 8:00-16:00 oraz w co drugą sobotę 8:00-12:00. [Done]
->- Zarządzanie kontami dla admina [Backend Done]
+>- Zarządzanie kontami dla admina [Done]

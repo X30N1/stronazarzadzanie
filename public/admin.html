@@ -8,7 +8,7 @@
     <script src="js/admin.js"></script>
 </head>
 <body>
-    <div class="window">
+    <div class="window" id="window">
         <div class="title-bar">
             <div class="title-bar-text">System Zarządzania</div>
             <div class="title-bar-controls">
@@ -18,48 +18,64 @@
         </div>
         <div class="window-body">      
             <menu role="tablist">
-              <li role="tab" aria-selected="true"><a href="#tabs">Pacjenci</a></li>
-              <li role="tab"><a href="#tabs">Lekarze</a></li>
+              	<li role="tab" aria-selected="true"><a href="#tabs">Pacjenci</a></li>
+              	<li role="tab"><a href="#tabs">Lekarze</a></li>
             </menu>
             <div class="window" role="tabpanel">
                 <div class="window-body">
-                  <p>Wybierz stronę</p>
+                	<p>Wybierz stronę</p>
                 </div>
+				<div class="table-container" id="table-thingo" style="display: none;">
+					<div class="table-header">
+						<button onclick="prevPage()">Poprzednia Strona</button>
+						<button onclick="nextPage()">Następna Strona</button>
+					</div>
+					<div class="table-content">
+						<table id="table">
+							<thead>
+								<td>
+									
+								</td>
+								<td>
+									ID
+								</td>
+								<td>
+									Login
+								</td>
+								<td>
+									E-Mail
+								</td>
+								<td>
+									Imię
+								</td>
+								<td>
+									Nazwisko
+								</td>
+							</thead>
+						</table>
+					</div>
+					<div class="table-footer">
+						<span id="count">Strona 1/1 (ilość pól: 0)</span>
+						<span>Wyświetl: <select id="display-count" onchange="getListOf()">
+							<option value="10">10</option>
+							<option value="25">25</option>
+							<option value="50" selected>50</option>
+						</select></span>
+					</div>
+					<div class="buttons-container">
+						<button class="delete-button" onclick="buttonRemove()">Usuń konto</button>
+						<button class="edit-button" id="edit-visit-btn" onclick="showEdit()">Edytuj konto</button>
+						<button class="add-button" id="add-visit-btn" onclick="showAdd()">Dodaj konto</button>
+					</div>
+				</div>
               </div>
           </div>
         <div class="status-bar">
-            <p class="status-bar-field">Sponsored by:</p>
-            <p class="status-bar-field">INTEL XEON</p>
-            <p class="status-bar-field">Server status: Active</p>
-          </div>
+			<p class="status-bar-field">Sponsored by:</p>
+			<p class="status-bar-field">INTEL XEON</p>
+			<p class="status-bar-field">Server status: Active</p>
+		</div>
     </div>
-    <script>
-const tabs = document.querySelectorAll('[role="tab"]');
-const tabContentContainer = document.querySelector('.window[role="tabpanel"] .window-body');
-
-// FOR JESS: Tutaj każda linia to kolejna karta po kliknięciu w kartę na liściw w HTML.
-//Można sztywną stronę, albo dać skrypt żeby z serwera wywoływał stronę
-const tabContents = [
-  '<h2>Tabela pacjentów</h2><p>Tu będzie skrypt do zaciągania z servera informacji.</p>', //zakładka 1 w '(treść tutaj)'
-  '<h2>Tabela lekarzy</h2><p>Informacje o komputerze użytkownika. Można tu dodać inne elementy HTML.</p>',
-];
-
-function switchTab(event) {
-  tabs.forEach(tab => {
-    tab.setAttribute('aria-selected', 'false');
-  });
-  const selectedTab = event.currentTarget;
-  selectedTab.setAttribute('aria-selected', 'true');
-
-  const tabIndex = Array.from(tabs).indexOf(selectedTab);
-  tabContentContainer.innerHTML = tabContents[tabIndex];
-}
-
-tabs.forEach(tab => {
-  tab.addEventListener('click', switchTab);
-});
-
-    </script>
 
     <div class="window-small" id="myModal">
         <div class="title-bar">
@@ -75,16 +91,32 @@ tabs.forEach(tab => {
         </div>
     </div>
 
-    <script>
-        var modal = document.getElementById("myModal");
-        var btn = document.getElementById("helpBtn");
-        var span = document.getElementsByClassName("close-btn")[0];
-        btn.onclick = function() {
-          modal.style.display = "block";
-        }
-        span.onclick = function() {
-          modal.style.display = "none";
-        }
-    </script>
+	<div class="popup-overlay" id="popup-overlay">
+        <div class="popup">
+            <button class="close-popup" id="close-popup-btn" onclick="closePopup()">X</button>
+            <h2 id="error-info"></h2>
+            <form>
+                <label for="login">Login</label>
+                <input type="text" id="inputALogin" name="login">
+				
+                <label for="email">Adres E-Mail</label>
+                <input type="text" id="inputAEMail" name="email">
+                
+                <label for="fname">Imię</label>
+                <input type="text" id="inputAName" name="fname">
+                
+                <label for="lname">Nazwisko</label>
+                <input type="text" id="inputALName" name="lname">
+                
+                <label class="patient" for="contact">Kontakt</label>
+                <input class="patient" type="text" id="inputAContact" name="contact">
+
+                <label class="patient" for="address">Adres</label>
+                <input class="patient" type="text" id="inputAAddress" name="address">
+                
+                <input type="button" class="edit-button" onclick="buttonEdit()" value="Edytuj"></input>
+            </form>
+        </div>
+    </div>
 </body>
 </html>

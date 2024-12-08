@@ -1,1 +1,1 @@
-pm2 start server.js
+npx pm2 start server.js

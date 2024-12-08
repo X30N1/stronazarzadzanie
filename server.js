@@ -344,6 +344,221 @@ app.post("/api/accounts/update", (request, response, next) => {
     })
 });
 
+app.post("/api/accounts/admin/count", (request, response, next) => {
+
+    const privilege = request.body.privilege
+
+    if(privilege < 2) {
+        return response.status(400).json({"error":"insufficient permissions"})
+    }
+
+    var sql = ""
+    var parameters = []
+
+    sql = "SELECT COUNT(accountID) AS 'count' FROM accounts WHERE login IS NOT 'admin';"
+
+    db.all(sql, parameters, (error, sqlResponse) => {
+        if (error) {
+            response.status(400).json({"error":error.message})
+            return
+        }
+        return response.json({"success":sqlResponse})
+    })
+})
+
+app.post("/api/patients/admin/count", (request, response, next) => {
+
+    const privilege = request.body.privilege
+
+    if(privilege < 2) {
+        return response.status(400).json({"error":"insufficient permissions"})
+    }
+
+    var sql = ""
+    var parameters = []
+
+    sql = "SELECT COUNT(patientID) AS 'count' FROM patients;"
+
+    db.all(sql, parameters, (error, sqlResponse) => {
+        if (error) {
+            response.status(400).json({"error":error.message})
+            return
+        }
+        return response.json({"success":sqlResponse})
+    })
+})
+
+app.post("/api/accounts/admin/select", (request, response, next) => {
+
+    const privilege = request.body.privilege
+    
+    if(privilege < 2) {
+        return response.status(400).json({"error":"insufficient permissions"})
+    }
+
+    const limit = request.body.limit
+    const offset = request.body.offset * limit
+
+    var sql = ""
+    var parameters = []
+
+    sql = "SELECT accountID, login, name, lname, email, privilege FROM accounts WHERE login IS NOT 'admin' ORDER BY accountID ASC LIMIT %limit% OFFSET %offset%;"
+    .replace("%limit%", limit) 
+    .replace("%offset%", offset)
+
+    db.all(sql, parameters, (error, sqlResponse) => {
+        if (error) {
+            response.status(400).json({"error":error.message})
+            return
+        }
+        return response.json({"success":sqlResponse})
+    })
+})
+
+app.post("/api/patients/admin/select", (request, response, next) => {
+
+    const privilege = request.body.privilege
+    
+    if(privilege < 2) {
+        return response.status(400).json({"error":"insufficient permissions"})
+    }
+
+    const limit = request.body.limit
+    const offset = request.body.offset * limit
+
+    var sql = ""
+    var parameters = []
+
+    sql = "SELECT patientID, patientLogin, patientName, patientLName, patientEmail, patientContact, patientAddress FROM patients ORDER BY patientID ASC LIMIT %limit% OFFSET %offset%;"
+    .replace("%limit%", limit) 
+    .replace("%offset%", offset)
+
+    db.all(sql, parameters, (error, sqlResponse) => {
+        if (error) {
+            response.status(400).json({"error":error.message})
+            return
+        }
+        return response.json({"success":sqlResponse})
+    })
+})
+
+app.post("/api/accounts/admin/remove", (request, response, next) => {
+
+    const ID = request.body.id
+    const privilege = request.body.privilege
+
+    if(privilege < 2) {
+        return response.json({"error":"insufficient permissions"})
+    }
+
+    var sql = ""
+    var parameters = []
+
+    sql = "DELETE FROM accounts WHERE accountID = %accountID%;"
+    .replace("%accountID%", ID)
+    
+    db.all(sql, parameters, (error, sqlResponse) => {
+        if (error) {
+            response.status(400).json({"error":error.message})
+            return
+        }
+        return response.json({"message":"success"})
+    })
+})
+
+app.post("/api/patients/admin/remove", (request, response, next) => {
+
+    const ID = request.body.id
+    const privilege = request.body.privilege
+
+    if(privilege < 2) {
+        return response.json({"error":"insufficient permissions"})
+    }
+
+    var sql = ""
+    var parameters = []
+
+    sql = "DELETE FROM patients WHERE patientID = %patientID%;"
+    .replace("%patientID%", ID)
+    
+    db.all(sql, parameters, (error, sqlResponse) => {
+        if (error) {
+            response.status(400).json({"error":error.message})
+            return
+        }
+        return response.json({"message":"success"})
+    })
+})
+
+app.post("/api/accounts/admin/update", (request, response, next) => {
+
+    const privilege = request.body.privilege
+    const login = request.body.login
+    const id = request.body.id
+    const name = request.body.name
+    const lname = request.body.lname
+    const email = request.body.email
+
+    if(privilege < 2) {
+        return response.status(400).json({"error":"insufficient permissions"})
+    }
+
+    var sql = ""
+    var parameters = []
+
+    sql = "UPDATE accounts SET login = '%login%', name = '%name%', lname = '%lname%', email = '%email%' WHERE accountID = %id%;"
+    .replace("%login%", login)
+    .replace("%name%", name)
+    .replace("%lname%", lname)
+    .replace("%email%", email)
+    .replace("%id%", id)
+
+    db.all(sql, parameters, (error, sqlResponse) => {
+        if (error) {
+            response.status(400).json({"error":error.message})
+            return
+        }
+        return response.json({"message":"success"})
+    })
+});
+
+app.post("/api/patients/admin/update", (request, response, next) => {
+
+    const privilege = request.body.privilege
+    const patientID = request.body.patientID
+    const patientLogin = request.body.patientLogin
+    const patientName = request.body.patientName
+    const patientLName = request.body.patientLName
+    const patientContact = request.body.patientContact
+    const patientAddress = request.body.patientAddress
+    const patientEmail = request.body.patientEmail
+
+    if(privilege < 2) {
+        return response.status(400).json({"error":"insufficient permissions"})
+    }
+
+    var sql = ""
+    var parameters = []
+
+    sql = "UPDATE patients SET patientLogin = '%patientLogin%', patientName = '%patientName%', patientLName = '%patientLName%', patientContact = '%patientContact%', patientAddress = '%patientAddress%', patientEmail = '%patientEmail%' WHERE patientID = %patientID%;"
+    .replace("%patientLogin%", patientLogin)
+    .replace("%patientName%", patientName)
+    .replace("%patientLName%", patientLName)
+    .replace("%patientContact%", patientContact)
+    .replace("%patientID%", patientID)
+    .replace("%patientAddress%", patientAddress)
+    .replace("%patientEmail%", patientEmail)
+
+    db.all(sql, parameters, (error, sqlResponse) => {
+        if (error) {
+            response.status(400).json({"error":error.message})
+            return
+        }
+        return response.json({"message":"success"})
+    })
+
+})
+
 app.post("/api/patients/register", (request, response, next) => {
 
     const login = request.body.login

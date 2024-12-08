@@ -39,7 +39,7 @@ async function prevPage() {
 
 async function getListOfAppointments() {
     
-    var count = await asyncCount(sessionStorage.privilege)
+    var count = await asyncCount(sessionStorage.getItem("privilege"))
     count = Number(count.success[0].count)
     var maxPerPage = document.getElementById("display-count").value
     ////console.log(maxPerPage)

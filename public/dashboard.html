@@ -14,6 +14,7 @@
         <div class="nav-left">Rejestracja</div>
         <div class="nav-right">
             <span id="welcome"></span>
+            <button class="edit-button" id="change-account-info" onclick="showPopupAccount()">Zmień informacje o twoim koncie</button>
             <button class="logout-button" onclick="logout()">Wyloguj</button>
         </div>
     </header>
@@ -103,18 +104,19 @@
         </div>
     </div>
 
-    <div class="popup-change-account" id="popup-change-account">
-        <div>
-            <button class="close-popup" id="close-popup-btn" onclick="closePopup()">X</button>
+    <div class="popup-overlay" id="popup-overlay-account">
+        <div class="popup">
+            <button class="close-popup" id="close-popup-btn" onclick="closePopupAccount()">X</button>
+            <h2 id="error-info"></h2>
             <form>
-                <label for="name">Imię</label>
+                <label for="fname">Imię</label>
                 <input type="text" id="inputAName" name="fname">
                 
                 <label for="lname">Nazwisko</label>
                 <input type="text" id="inputALName" name="lname">
                 
                 <label for="email">Adres E-Mail</label>
-                <input type="text" id="inputAContact" name="email">
+                <input type="text" id="inputAEMail" name="email">
 
                 <label for="oldpsw">Stare Hasło*</label>
                 <input type="password" id="inputAOldPassword" name="oldpswd">
@@ -126,6 +128,13 @@
                 <input type="password" id="inputAConfirmNewPassword" name="cnfpsd">
 
                 <span>* - (zostaw puste, jeżeli nie chcesz zmieniać)</span>
+                <hr>
+                <ul>
+                    <b>Twoje hasło musi zawierać:</b>
+                    <li>Co najmniej 12 znaków</li>
+                    <li>Co najmniej jedną cyfrę</li>
+                    <li>Hasło nie może być zawarte w liście najczęściej używanych haseł</li>
+                </ul>
                 
                 <input type="button" id="acc-edit-button" class="edit-button" onclick="buttonEditAccount()" value="Edytuj"></input>
             </form>

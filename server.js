@@ -136,7 +136,6 @@ app.get("/api", (request, response, next) => {
 app.post("/api/cert/password", (request, response) => {
 
     const password = request.body.password
-    console.log(password)
     sql = ("SELECT * FROM commonPasswords WHERE password = '%password%';")
         .replace("%password%", password)
 
@@ -146,13 +145,9 @@ app.post("/api/cert/password", (request, response) => {
             return
         }
         else if(sqlResponse.length == 0) {
-            console.log(sql)
-            console.log(request.body.password)
             return response.json({"message": "success"})
         }
         else {
-            console.log(sql)
-            console.log(request.body.password)
             return response.json({"message": "failure"})
         }
     });
@@ -167,7 +162,7 @@ app.post("/api/accounts/login", (request, response, next) => {
     var sql = ""
     var parameters = []
 
-    sql = "SELECT accountID, password, name, lname, privilege FROM accounts WHERE login = '%login%';"
+    sql = "SELECT accountID, password, name, lname, email, privilege FROM accounts WHERE login = '%login%';"
     .replace("%login%", login) 
 
     db.all(sql, parameters, (error, sqlResponse) => {
@@ -185,6 +180,7 @@ app.post("/api/accounts/login", (request, response, next) => {
         var hash = sqlResponse[0].password
         var name = sqlResponse[0].name
         var lname = sqlResponse[0].lname
+        var email = sqlResponse[0].email
         var id = sqlResponse[0].accountID
         var privilege = sqlResponse[0].privilege
 
@@ -206,9 +202,66 @@ app.post("/api/accounts/login", (request, response, next) => {
                 login: login,
                 name: name,
                 lname: lname,
+                email: email,
                 privilege: privilege
             })
             return
+        })
+    })
+})
+
+app.post("/api/accounts/changepassword", (request, response, next) => {
+
+    const ID = request.body.id
+    const password = request.body.password
+    const newPassword = request.body.newPassword
+
+    var sql = ""
+    var parameters = []
+
+    sql = "SELECT password FROM accounts WHERE accountID = %id%;"
+    .replace("%id%", ID) 
+
+    var sql2 = "UPDATE accounts SET password = '%newPassword%' WHERE accountID = %id%;"
+    .replace("%id%", ID) 
+
+    db.all(sql, parameters, (error, sqlResponse) => {
+
+        if (error) {
+            response.status(400).json({"error":error.message})
+            return
+        }
+        if(sqlResponse.length == 0) {
+            response.json({
+                "message": "doesntExist"
+            })
+            return
+        }
+
+        var hash = sqlResponse[0].password
+
+        bcrypt.compare(password, hash, function(err, result) {
+            if(!result || err) {
+                response.json({"message":"failure"})
+                return
+            }
+            
+            bcrypt.hash(newPassword, saltRounds, function(error, hash2) {
+                if (error) {
+                    return response.json({"error":err})
+                }
+                
+                sql2 = sql2.replace('%newPassword%', hash2)
+                var parameters = []
+        
+                db.all(sql2, parameters, (error, sqlResponse) => {
+                    if (error) {
+                        response.status(400).json({"error":error.message})
+                        return
+                    }
+                    return response.json({"message":"success"})
+                })
+            });
         })
     })
 })
@@ -264,12 +317,12 @@ app.post("/api/accounts/register", (request, response, next) => {
 app.post("/api/accounts/update", (request, response, next) => {
 
     const privilege = request.body.privilege
-    const id = request.body.patientID
-    const name = request.body.patientName
-    const lname = request.body.patientLName
-    const email = request.body.patientContact
+    const id = request.body.id
+    const name = request.body.name
+    const lname = request.body.lname
+    const email = request.body.email
 
-    if(privilege < 2) {
+    if(privilege < 1) {
         return response.status(400).json({"error":"insufficient permissions"})
     }
 
@@ -552,62 +605,6 @@ app.post("/api/patients/changepassword", (request, response, next) => {
                 var parameters = []
         
                 db.all(sql2, parameters, (error, sqlResponse) => {
-                    if (error) {
-                        response.status(400).json({"error":error.message})
-                        return
-                    }
-                    return response.json({"message":"success"})
-                })
-            });
-        })
-    })
-})
-
-app.post("/api/accounts/changepassword", (request, response, next) => {
-
-    const id = request.body.id
-    const password = request.body.password
-    const newPassword = request.body.newPassword
-
-    var sql = ""
-    var parameters = []
-
-    sql = "SELECT accountID, password FROM accounts WHERE accountID = '%accountID%';"
-    .replace("%patientID%", id) 
-
-    var sql2 = "UPDATE accounts SET password = '%newPassword%' WHERE accountID = '%accountID%';"
-    .replace("%patientID%", id) 
-
-    db.all(sql, parameters, (error, sqlResponse) => {
-
-        if (error) {
-            response.status(400).json({"error":error.message})
-            return
-        }
-        if(sqlResponse.length == 0) {
-            response.json({
-                "message": "doesntExist"
-            })
-            return
-        }
-
-        var hash = sqlResponse[0].password
-
-        bcrypt.compare(password, hash, function(err, result) {
-            if(!result || err) {
-                response.json({"message":"failure"})
-                return
-            }
-            
-            bcrypt.hash(newPassword, saltRounds, function(error, hash2) {
-                if (error) {
-                    return response.json({"error":err})
-                }
-        
-                sql2 = sql2.replace('%newPassword%', hash2)
-                var parameters = []
-        
-                db.all(sql, parameters, (error, sqlResponse) => {
                     if (error) {
                         response.status(400).json({"error":error.message})
                         return

@@ -8,11 +8,11 @@ async function button() {
     const login = document.getElementById("inputLogin").value
     const password = document.getElementById("inputPassword").value
 
-    console.log(login)
-    console.log(password)
+    //console.log(login)
+    //console.log(password)
 
     const content = await asyncLogin(login, password)
-    console.log(content)
+    //console.log(content)
 
     if(content.message == "success") {
         sessionStorage.setItem("id", content.id)

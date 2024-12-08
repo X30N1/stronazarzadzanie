@@ -4,6 +4,9 @@ const urlGA = "http://localhost:8000/api/appointments/select"
 const urlUA = "http://localhost:8000/api/appointments/update"
 const urlRA = "http://localhost:8000/api/appointments/remove"
 const urlPA = "http://localhost:8000/api/patients/add"
+const urlAU = "http://localhost:8000/api/accounts/update"
+const urlACP = "http://localhost:8000/api/accounts/changepassword"
+const urlPCh = "http://localhost:8000/api/cert/password"
 const urlD = "http://localhost:8000/personel/dashboard"
 const urlLO = "http://localhost:8000/logout"
 const urlLI = "http://localhost:8000/personel/login"
@@ -39,7 +42,7 @@ async function getListOfAppointments() {
     var count = await asyncCount(sessionStorage.privilege)
     count = Number(count.success[0].count)
     var maxPerPage = document.getElementById("display-count").value
-    console.log(maxPerPage)
+    ////console.log(maxPerPage)
     maxPages = 1 + Math.floor(count / maxPerPage) 
     document.getElementById("count").innerHTML = "Strona " + currentPage + "/" + maxPages + " (ilość pól: " + count + ")"
 
@@ -69,7 +72,7 @@ async function displayAppointments(content) {
 
         for(j = 0; j < 7; j++) {
             var element = document.createElement("td")
-            console.log(content[i])
+            ////console.log(content[i])
             switch(j) {
                 case 0:
                     var text = document.createTextNode(content[i].patientName)
@@ -115,17 +118,17 @@ async function buttonAddAppointment() {
     const privilege = sessionStorage.getItem("privilege")
 
     const content = await asyncAddPatient(name, lname, contact, address, privilege)
-    console.log(content)
+    ////console.log(content)
 
     const id = content.success[0].patientID
-    console.log(id)
+    ////console.log(id)
 
     if(content.message != "success") {
         getListOfAppointments()
     }
     
     const content2 = await asyncAddAppointment(id, date, time, privilege)
-    console.log(content2)
+    ////console.log(content2)
 
     if(content2.success) {
         getListOfAppointments()
@@ -146,6 +149,80 @@ async function showPopup() {
     mainContent.classList.add('blur');
 }
 
+async function closePopupAccount() {
+    const popupOverlay = document.getElementById('popup-overlay-account');
+    const mainContent = document.getElementById('main-content');
+    popupOverlay.style.display = 'none';
+    mainContent.classList.remove('blur');
+}
+
+async function showPopupAccount() {
+    const popupOverlay = document.getElementById('popup-overlay-account');
+    const mainContent = document.getElementById('main-content');
+    popupOverlay.style.display = 'flex';
+    mainContent.classList.add('blur');
+    document.getElementById("inputAName").value = sessionStorage.getItem("name")
+    document.getElementById("inputALName").value = sessionStorage.getItem("lname")
+    document.getElementById("inputAEMail").value = sessionStorage.getItem("email")
+}
+
+async function buttonEditAccount(){
+    const name = document.getElementById("inputAName").value
+    const lname = document.getElementById("inputALName").value
+    const email = document.getElementById("inputAEMail").value
+    const oldpsw = document.getElementById("inputAOldPassword").value
+    const newpsw = document.getElementById("inputANewPassword").value
+    const cnewpsw = document.getElementById("inputAConfirmNewPassword").value
+
+    if(name == "" || lname == "" || email == "") { 
+
+    }
+    if(oldpsw != "" && newpsw != "" && cnewpsw != "") {
+        if(newpsw != cnewpsw) {
+            document.getElementById("error-info").innerHTML = "<b>Błąd:</b> Hasła nie są identyczne."
+            return
+        }
+        else if(newpsw.length < 12) {
+            document.getElementById("error-info").innerHTML = "<b>Błąd:</b> Hasło jest za krótkie"
+            return
+        }
+        else if(/\d/.test(newpsw) == false) {
+            document.getElementById("error-info").innerHTML = "<b>Błąd:</b> Hasło musi zawierać co najmniej jedna cyfrę."
+            return
+        }
+    
+        var checkPassword = await asyncCheckCert(newpsw)
+        ////console.log(checkPassword)
+    
+        if(checkPassword.message == 'failure') {
+            document.getElementById("error-info").innerHTML = "<b>Błąd:</b> Hasło znajduje sie w bazie danych popularnych haseł!"
+            return
+        }
+        
+        var content = await asyncChangePassword(oldpsw, newpsw)
+        ////console.log(content)
+
+        if(content.message == "failure") {
+            document.getElementById("error-info").innerHTML = "<b>Błąd:</b> Stare hasło nie było identyczne!"
+            return
+        }
+    }
+
+    var content = await asyncUpdateAccount(name, lname, email)
+
+    if(content.message == "success") {
+        sessionStorage.setItem("name", name)
+        sessionStorage.setItem("lname", lname)
+        sessionStorage.setItem("email", email)
+        document.getElementById("welcome").innerHTML = "Witaj " + sessionStorage.getItem("name")
+    }
+    else {
+        document.getElementById("error-info").innerHTML = "<b>Błąd:</b> Wystąpił jakiś błąd!"
+        return
+    }
+    closePopupAccount()
+}
+
 async function showEdit() {
 
     showPopup();
@@ -153,8 +230,8 @@ async function showEdit() {
     document.getElementById("func-save-button").style.display = "none";
     document.getElementById("func-edit-button").style.display = "block";
 
-    console.log("omegalul");
-    console.log(document.querySelector('input[name="select-appointment"]:checked').value);
+    ////console.log("omegalul");
+    ////console.log(document.querySelector('input[name="select-appointment"]:checked').value);
 
     var list = document.getElementsByClassName("display-edit");
     for(i = 0; i < list.length; i++) {
@@ -181,7 +258,7 @@ async function showAdd() {
     document.getElementById("func-edit-button").style.display = "none";
     
     var list = document.getElementsByClassName("display-edit");
-    console.log(list)
+    ////console.log(list)
     for(i = 0; i < list.length; i++) {
         list[i].style.display = "none";
     }
@@ -208,10 +285,10 @@ async function buttonEditAppointment() {
     const privilege = sessionStorage.getItem("privilege")
 
     const content = await asyncAddPatient(name, lname, contact, address, privilege)
-    console.log(content)
+    ////console.log(content)
 
     const id = content.success[0].patientID
-    console.log(id)
+    ////console.log(id)
 
     if(content.message != "success") {
         getListOfAppointments()
@@ -380,6 +457,77 @@ async function asyncAddPatient(name, lname, contact, address, privilege) {
     const content = await response.json()
     return content
 }
+
+async function asyncCheckCert(password) {
+
+    const headers = new Headers({
+        "Content-Type": "application/json"
+    })
+
+    const body = JSON.stringify({
+        password: password
+    })
+
+    const options = {
+        method: "POST",
+        headers: headers,
+        body: body
+    }
+
+    const response = await fetch(urlPCh, options)
+    const content = await response.json()
+    return content
+
+}
+
+async function asyncChangePassword(oldpsw, newpsw) {
+
+    const headers = new Headers({
+        "Content-Type": "application/json"
+    })
+
+    const body = JSON.stringify({
+        id: sessionStorage.getItem("id"),
+        password: oldpsw,
+        newPassword: newpsw
+    })
+
+    const options = {
+        method: "POST",
+        headers: headers,
+        body: body
+    }
+
+    const response = await fetch(urlACP, options)
+    const content = await response.json()
+    return content
+}
+
+async function asyncUpdateAccount(name, lname, email) {
+
+    const headers = new Headers({
+        "Content-Type": "application/json"
+    })
+
+    const body = JSON.stringify({
+        id: sessionStorage.getItem("id"),
+        name: name,
+        lname: lname,
+        email: email,
+        privilege: sessionStorage.getItem("privilege")
+    })
+
+    const options = {
+        method: "POST",
+        headers: headers,
+        body: body
+    }
+
+    const response = await fetch(urlAU, options)
+    const content = await response.json()
+    return content
+}
+
 async function logout() {
 
     const response = await fetch(urlLO, {method: "GET"})

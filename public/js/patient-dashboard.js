@@ -53,7 +53,7 @@ window.onload = async function() {
     data = content.success
 
     displayPersonel(data)
-    console.log("bruh")
+    //console.log("bruh")
 
 }
 
@@ -63,10 +63,10 @@ async function getListOfAppointments() {
     data = content.success
 
     for(i in data) {
-        console.log(data[i].appointmentTime)
+        //console.log(data[i].appointmentTime)
     }
 
-    console.log(content.success)
+    //console.log(content.success)
     date = new Date(document.getElementById('check-date').value)
     type = 0
     if(date.getWeek() % 2 == 0 && date.getDay() == 6) {
@@ -84,7 +84,7 @@ async function getListOfAppointments() {
     var count = await asyncPatientCount()
     count = Number(count.success[0].count)
     var maxPerPage = document.getElementById("display-count").value
-    console.log(maxPerPage)
+    //console.log(maxPerPage)
     maxPages = 1 + Math.floor(count / maxPerPage) 
     document.getElementById("count").innerHTML = "Strona " + currentPage + "/" + maxPages + " (ilość pól: " + count + ")"
 
@@ -156,7 +156,7 @@ async function buttonEditAccount(){
         }
     
         var checkPassword = await asyncCheckCert(newpsw)
-        console.log(checkPassword)
+        //console.log(checkPassword)
     
         if(checkPassword.message == 'failure') {
             document.getElementById("error-info").innerHTML = "<b>Błąd:</b> Hasło znajduje sie w bazie danych popularnych haseł!"
@@ -166,7 +166,7 @@ async function buttonEditAccount(){
         var content = await asyncChangePassword(oldpsw, newpsw)
 
         if(content.message == "failure") {
-            document.getElementById("error-info").innerHTML = "<b>Błąd:</b> Hasła nie były identyczne!"
+            document.getElementById("error-info").innerHTML = "<b>Błąd:</b> Stare hasło nie było identyczne!"
             return
         }
     }
@@ -218,7 +218,7 @@ async function displayPatientAppointments(content) {
 
         for(j = 0; j < 4; j++) {
             var element = document.createElement("td")
-            console.log(content[i])
+            //console.log(content[i])
             switch(j) {
                 case 0:
                     var text = document.createTextNode(content[i].name)
@@ -263,8 +263,8 @@ async function displayAppointments(content, type) {
         if (a > -1) {
             possibleDates.splice(a, 1)
         }
-        console.log(content[i].appointmentTime)
-        console.log(a)
+        //console.log(content[i].appointmentTime)
+        //console.log(a)
     }
 
     if(possibleDates == []) {
@@ -346,7 +346,7 @@ async function asyncGetAppointments(id) { // todo
         return 
     }
 
-    console.log(date)
+    //console.log(date)
 
     const headers = new Headers({
         "Content-Type": "application/json"

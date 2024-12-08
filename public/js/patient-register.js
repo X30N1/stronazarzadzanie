@@ -79,7 +79,7 @@ async function button() {
     }
 
     var checkPassword = await asyncCheckCert(password)
-    console.log(checkPassword)
+    //console.log(checkPassword)
 
     if(checkPassword.message == 'failure') {
         document.cookie = "message = passwordCheck; SameSite = None; Max-Age = 1000; Secure; path=/register;"

@@ -1,7 +1,7 @@
 const url = "http://localhost:8000/api/accounts/register"
 const urlPC = "http://localhost:8000/api/cert/password"
-const urlL = "http://localhost:8000/personel/login"
-const urlR = "http://localhost:8000/personel/register"
+const urlL = "http://localhost:8000/personnel/login"
+const urlR = "http://localhost:8000/personnel/register"
 
 window.onload = function() {
     var cookie = getCookie("message")

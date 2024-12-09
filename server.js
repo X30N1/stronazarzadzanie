@@ -90,11 +90,11 @@ app.get("/register", (request, response, next) => {
     response.sendFile(path.join(__dirname, "/public/patient-register.html"));
 });
   
-app.get("/personel/login", (request, response, next) => {
+app.get("/personnel/login", (request, response, next) => {
     response.sendFile(path.join(__dirname, "/public/login.html"));
 });
 
-app.get("/personel/register", (request, response, next) => {
+app.get("/personnel/register", (request, response, next) => {
     response.sendFile(path.join(__dirname, "/public/register.html"));
 });
 
@@ -113,7 +113,7 @@ app.get("/dashboard", (request, response, next) => {
     }
 });
 
-app.get("/personel/dashboard", (request, response, next) => {
+app.get("/personnel/dashboard", (request, response, next) => {
 
     const isLoggedIn = request.session.isLoggedIn;
     const privilege = request.session.privilege;
@@ -125,7 +125,7 @@ app.get("/personel/dashboard", (request, response, next) => {
         response.sendFile(path.join(__dirname, "/public/admin.html"));
     }
     else {
-        response.redirect('/personel/login');
+        response.redirect('/personnel/login');
     }
 });
 
@@ -894,7 +894,7 @@ app.post("/api/patients/checktaken", (request, response, next) => {
     })
 })
 
-app.post("/api/patients/getpersonel", (request, response, next) => {
+app.post("/api/patients/getpersonnel", (request, response, next) => {
   
     var sql = ""
     var parameters = []

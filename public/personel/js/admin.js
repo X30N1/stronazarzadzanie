@@ -1,4 +1,4 @@
-const urlPeR = "http://localhost:8000/personel/register"
+const urlPeR = "http://localhost:8000/personnel/register"
 const urlPaR = "http://localhost:8000/register"
 const urlAC = "http://localhost:8000/api/accounts/admin/count"
 const urlPC = "http://localhost:8000/api/patients/admin/count"
@@ -9,7 +9,7 @@ const urlPR = "http://localhost:8000/api/patients/admin/remove"
 const urlAU = "http://localhost:8000/api/accounts/admin/update"
 const urlPU = "http://localhost:8000/api/patients/admin/update"
 const urlLO = "http://localhost:8000/logout"
-const urlLI = "http://localhost:8000/personel/login"
+const urlLI = "http://localhost:8000/personnel/login"
 
 var currentTabIndex = 0;
 var currentPage = 1
@@ -80,7 +80,7 @@ async function getListOf() {
     }
     if(currentTabIndex == 1) {
         currentPage = 1
-        getListOfPersonel()
+        getListOfPersonnel()
     }
 }
 
@@ -96,10 +96,10 @@ async function buttonRemove() {
         }
     }
     if(currentTabIndex == 1) {
-        const content = await asyncRemovePersonel(id)
+        const content = await asyncRemovePersonnel(id)
 
         if(content.message == "success") {
-            getListOfPersonel()
+            getListOfPersonnel()
         }
     }
 }
@@ -120,7 +120,7 @@ async function buttonEdit() {
         content = await asyncUpdatePatient(id, login, name, lname, email, contact, address)
     }
     else if(currentTabIndex == 1) {
-        content = await asyncUpdatePersonel(id, login, name, lname, email)
+        content = await asyncUpdatePersonnel(id, login, name, lname, email)
     }
 
     if(content.message == "success") {
@@ -157,17 +157,17 @@ async function getListOfPatients() {
     closePopup();
 }
 
-async function getListOfPersonel() {
+async function getListOfPersonnel() {
     var count = await asyncCount()
     count = Number(count.success[0].count)
     var maxPerPage = document.getElementById("display-count").value
     maxPages = 1 + Math.floor(count / maxPerPage) 
     document.getElementById("count").innerHTML = "Strona " + currentPage + "/" + maxPages + " (ilość pól: " + count + ")"
 
-    var content = await asyncGetPersonel(maxPerPage, (currentPage - 1))
+    var content = await asyncGetPersonnel(maxPerPage, (currentPage - 1))
     data = content.success
 
-    displayPersonel(data)
+    displayPersonnel(data)
     closePopup();
 }
 
@@ -194,7 +194,7 @@ async function asyncGetPatients(limit, offset) {
     return content
 }
 
-async function asyncGetPersonel(limit, offset) {
+async function asyncGetPersonnel(limit, offset) {
 
     const headers = new Headers({
         "Content-Type": "application/json"
@@ -344,7 +344,7 @@ async function displayPatients(content) {
     document.getElementById("table").append(test)
 }
 
-async function displayPersonel(content) {
+async function displayPersonnel(content) {
     if(document.getElementById("table-data") != null) {
         document.getElementById("table-data").remove()
     }
@@ -413,7 +413,7 @@ async function asyncRemovePatient(id) { // todo
     return content
 }
 
-async function asyncRemovePersonel(id) { // todo
+async function asyncRemovePersonnel(id) { // todo
 
     const headers = new Headers({
         "Content-Type": "application/json"
@@ -435,7 +435,7 @@ async function asyncRemovePersonel(id) { // todo
     return content
 }
 
-async function asyncUpdatePersonel(id, login, name, lname, email) {
+async function asyncUpdatePersonnel(id, login, name, lname, email) {
 
     const headers = new Headers({
         "Content-Type": "application/json"

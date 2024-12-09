@@ -2,5 +2,5 @@
 Prop3=19,2
 [InternetShortcut]
 IDList=
-URL=http://localhost:8000/personel/register
+URL=http://localhost:8000/personnel/register
 HotKey=0

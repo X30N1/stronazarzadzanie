@@ -7,9 +7,9 @@ const urlPA = "http://localhost:8000/api/patients/add"
 const urlAU = "http://localhost:8000/api/accounts/update"
 const urlACP = "http://localhost:8000/api/accounts/changepassword"
 const urlPCh = "http://localhost:8000/api/cert/password"
-const urlD = "http://localhost:8000/personel/dashboard"
+const urlD = "http://localhost:8000/personnel/dashboard"
 const urlLO = "http://localhost:8000/logout"
-const urlLI = "http://localhost:8000/personel/login"
+const urlLI = "http://localhost:8000/personnel/login"
 
 var currentPage = 1
 var maxPages = 1

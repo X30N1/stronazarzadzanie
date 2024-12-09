@@ -1,7 +1,7 @@
 const urlAL = "http://localhost:8000/api/accounts/login"
-const urlD = "http://localhost:8000/personel/dashboard"
-const urlL = "http://localhost:8000/personel/login"
-const urlR = "http://localhost:8000/personel/register"
+const urlD = "http://localhost:8000/personnel/dashboard"
+const urlL = "http://localhost:8000/personnel/login"
+const urlR = "http://localhost:8000/personnel/register"
 const urlI = "http://localhost:8000"
 
 async function button() {

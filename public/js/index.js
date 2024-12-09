@@ -1,5 +1,5 @@
 urlP = "http://localhost:8000/login"
-urlD = "http://localhost:8000/personel/login"
+urlD = "http://localhost:8000/personnel/login"
 
 async function toLoginp() {
     window.location.href = urlP

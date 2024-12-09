@@ -1,6 +1,6 @@
 const urlAA = "http://localhost:8000/api/appointments/add"
 const urlGC = "http://localhost:8000/api/patients/checktaken"
-const urlGP = "http://localhost:8000/api/patients/getpersonel"
+const urlGP = "http://localhost:8000/api/patients/getpersonnel"
 const urlSA = "http://localhost:8000/api/patients/selectappointments"
 const urlPC = "http://localhost:8000/api/patients/count"
 const urlPU = "http://localhost:8000/api/patients/update"
@@ -49,17 +49,17 @@ window.onload = async function() {
     document.getElementById("welcome").innerHTML = "Witaj " + sessionStorage.getItem("name")
     getListOfAppointments()
 
-    var content = await asyncGetPersonel()
+    var content = await asyncGetPersonnel()
     data = content.success
 
-    displayPersonel(data)
+    displayPersonnel(data)
     //console.log("bruh")
 
 }
 
 async function getListOfAppointments() {
 
-    var content = await asyncGetAppointments(document.getElementById('display-personel').value)
+    var content = await asyncGetAppointments(document.getElementById('display-personnel').value)
     if(content) {
         data = content.success
     }
@@ -200,7 +200,7 @@ async function buttonEditAccount(){
 }
 
 async function buttonAddAppointment() {
-    id = document.getElementById("display-personel").value
+    id = document.getElementById("display-personnel").value
     date = document.getElementById("check-date").value
     time = document.getElementById("display-time").value
 
@@ -295,9 +295,9 @@ async function displayAppointments(content, type) {
     document.getElementById("select-date").append(test)
 }
 
-async function displayPersonel(content) {
+async function displayPersonnel(content) {
 
-    var test = document.getElementById('display-personel')
+    var test = document.getElementById('display-personnel')
 
     if(document.getElementsByClassName("dp") != null) {
         document.querySelectorAll(".dp").forEach(el => el.remove());
@@ -423,7 +423,7 @@ async function asyncPatientCount() {
     return content
 }
 
-async function asyncGetPersonel() {
+async function asyncGetPersonnel() {
 
     const headers = new Headers({
         "Content-Type": "application/json"

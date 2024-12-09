@@ -60,7 +60,10 @@ window.onload = async function() {
 async function getListOfAppointments() {
 
     var content = await asyncGetAppointments(document.getElementById('display-personel').value)
-    data = content.success
+    if(content) {
+        data = content.success
+    }
+    
 
     for(i in data) {
         //console.log(data[i].appointmentTime)
@@ -68,8 +71,14 @@ async function getListOfAppointments() {
 
     //console.log(content.success)
     date = new Date(document.getElementById('check-date').value)
+    datenow = new Date(Date.now())
+    console.log(date.getTime())
+    console.log(datenow.getTime())
     type = 0
-    if(date.getWeek() % 2 == 0 && date.getDay() == 6) {
+    if (date.getTime() <= datenow.getTime()) {
+        type = 2
+    }
+    else if(date.getWeek() % 2 == 0 && date.getDay() == 6) {
         type = 0
     }
     else if (date.getDay() >= 1 && date.getDay() <= 5) {
@@ -78,6 +87,8 @@ async function getListOfAppointments() {
     else {
         type = 2
     }
+
+    console.log(type)
 
     displayAppointments(data, type)
     

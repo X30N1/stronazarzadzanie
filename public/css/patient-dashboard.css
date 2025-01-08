@@ -234,3 +234,18 @@ select {
 .blur {
     filter: blur(5px);
 }
+
+#welcome {
+    padding-right: 20px;
+}
+
+#check-date {
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    border: 1px solid #ebebeb;
+    background-color: #ebebeb;
+    box-sizing: border-box;
+    padding: 4px;
+    border-radius: 5px;
+    margin-left: 10px;
+}

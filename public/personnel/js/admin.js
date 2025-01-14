@@ -85,6 +85,9 @@ async function getListOf() {
 }
 
 async function buttonRemove() {
+
+    closePopupConfirm();
+
     const id = document.querySelector('input[name="select-account"]:checked').value;
  
     if(currentTabIndex == 0) {
@@ -255,6 +258,20 @@ async function closePopup() {
         el[i].style.display == "none";
     }
     mainContent.classList.remove('blur');
+}
+
+async function closePopupConfirm() {
+    const popupOverlay = document.getElementById('popup-overlay-confirm');
+    const mainContent = document.getElementById('window');
+    popupOverlay.style.display = 'none';
+    mainContent.classList.remove('blur');
+}
+
+async function showPopupConfirm() {
+    const popupOverlay = document.getElementById('popup-overlay-confirm');
+    const mainContent = document.getElementById('window');
+    popupOverlay.style.display = 'flex';
+    mainContent.classList.add('blur');
 }
 
 async function showPopup() {

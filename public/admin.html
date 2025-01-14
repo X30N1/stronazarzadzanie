@@ -63,7 +63,7 @@
 						</select></span>
 					</div>
 					<div class="buttons-container">
-						<button class="delete-button" onclick="buttonRemove()">Usuń konto</button>
+						<button class="delete-button" onclick="showPopupConfirm()">Usuń konto</button>
 						<button class="edit-button" id="edit-visit-btn" onclick="showEdit()">Edytuj konto</button>
 						<button class="add-button" id="add-visit-btn" onclick="showAdd()">Dodaj konto</button>
 					</div>
@@ -114,7 +114,18 @@
                 <label class="patient" for="address">Adres</label>
                 <input class="patient" type="text" id="inputAAddress" name="address">
                 
-                <input type="button" class="edit-button" onclick="buttonEdit()" value="Edytuj"></input>
+                <button class="edit-button" onclick="buttonEdit()">Edytuj</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="popup-overlay" id="popup-overlay-confirm">
+        <div class="popup">
+            <button class="close-popup" id="close-popup-btn" onclick="closePopupConfirm()">X</button>
+            <h2>Czy na pewno chcesz usunąć te konto?</h2>
+            <form>
+                <button class="edit-button" onclick="buttonRemove()">Tak</button>
+                <button class="edit-button" onclick="closePopupConfirm()">Nie</button>
             </form>
         </div>
     </div>
